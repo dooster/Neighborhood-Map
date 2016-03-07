@@ -1,6 +1,26 @@
-html, body, #map {
+html, body {
 	height: 100%;
 	width: 100%;
-	margin: 0;
-	padding: 0;
+	margin: auto;
+	padding-left: 10px;
+}
+
+#map-container, #map {
+	height: 590px;
+	width: 800px;
+	margin: auto;
+	padding: auto;
+}
+
+#header {
+	display:flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-content: flex-start;
+	align-items: flex-start;
+}
+
+.hed-butt {
+	margin-top: 25px;
 }
