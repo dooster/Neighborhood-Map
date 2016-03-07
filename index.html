@@ -4,17 +4,25 @@
 		<meta charset="utf-8">
 		<title>Map of Astoria</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/style.css" rel="stylesheet">
 	</header>
 	<body>
 		<div>
+			<button type="button" id="hamburger"></button>
+			<button type="button">My List</button>
 			<h2>Welcome to Astoria!</h2>
 			<!--Add some sort of drop down menu for locations? -->
 		</div>
-		<div id="map">
+		<div id="map-container" style="width: 100%; height: 100%; position: absolute;">
+			<div id="nav-bar">
+				<div id="search"></div>
+			</div>
 			<!--Google Map-->
 			<!--Maybe have some sort of menu bar at the side that has to be triggered for screens of a smaller size? -->
+			<div id="map"></div>
 		</div>
-		<script src="js/lib/knockout-3.2.0.js"></script>
+		<script src="js/lib/knockout.js"></script>
 		<script src="js/app.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWfQflNJXgmLuelddk4UDFgWGC5IPKm-0&callback=initMap" async defer></script>
 	</body>
 </html>
