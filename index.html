@@ -9,8 +9,10 @@
 	<body>
 		<div id="header">
 			<button class="hed-butt" type="button" id="hamburger">Location Search</button>
+			<button class="hed-butt" data-bind="click: displayResults">Home</button>
 			<h2>Welcome to Astoria!</h2>
-			<button class="hed-butt" type="button">My Saved Locations</button>
+			<button class="hed-butt" data-bind="click: displayMyLoc">My Saved Locations</button>
+			<button class="hed-butt" data-bind="click: displayJerLoc">Jeremy's Recommendations</buton>
 			<!--Add some sort of drop down menu for locations? -->
 		</div>
 		<div id="map-container">
