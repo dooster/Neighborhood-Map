@@ -1,11 +1,11 @@
-var map;
 function initMap() {
+	var map;
 	var mapOptions = {
 		disableDefaultUI: true
 	};
 
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 40.7666886, lng: -73.9322143},
+		center: {lat: 40.7652299, lng: -73.9187454},
 		zoom: 14
 	});
 

@@ -1,24 +1,42 @@
 html, body {
 	height: 100%;
 	width: 100%;
-	margin: auto;
+	margin: 0;
 	padding-left: 10px;
 }
 
-#map-container, #map {
-	height: 590px;
-	width: 800px;
-	margin: auto;
-	padding: auto;
+#map-container{
+	height: 610px;
+	max-width: 100%;
+}
+
+#map {
+	height: 610px;
+	width: 80%;
+	margin: 0;
+	padding: 0;
+}
+
+#nav-bar {
+	width: 15%;
+	margin: 0;
+	padding: 0;
+}
+
+#header, #map-container {
+	display:flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	align-items: flex-start;
 }
 
 #header {
-	display:flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
 	justify-content: space-around;
-	align-content: flex-start;
-	align-items: flex-start;
+}
+
+#map-container {
+	justify-content: flex-start;
 }
 
 .hed-butt {

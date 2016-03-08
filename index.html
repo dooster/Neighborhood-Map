@@ -8,17 +8,20 @@
 	</header>
 	<body>
 		<div id="header">
-			<button class="hed-butt" type="button" id="hamburger"></button>
-			<button class="hed-butt" type="button">My List</button>
+			<button class="hed-butt" type="button" id="hamburger">Location Search</button>
 			<h2>Welcome to Astoria!</h2>
+			<button class="hed-butt" type="button">My Saved Locations</button>
 			<!--Add some sort of drop down menu for locations? -->
 		</div>
 		<div id="map-container">
 			<div id="nav-bar">
-				<div id="search"></div>
+				<div class="search">
+					<input id="search-bar" placeholder="Search ..." type="search"></div>
+					<div id="search-results">
+						<p>Lorem ipsum</p>
+					</div>
+				</div>
 			</div>
-			<!--Google Map-->
-			<!--Maybe have some sort of menu bar at the side that has to be triggered for screens of a smaller size? -->
 			<div id="map"></div>
 		</div>
 		<script src="js/lib/knockout.js"></script>
