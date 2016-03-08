@@ -16,9 +16,9 @@
 		<div id="map-container">
 			<div id="nav-bar">
 				<div class="search">
-					<input id="search-bar" placeholder="Search ..." type="search"></div>
-					<div id="search-results">
-						<p>Lorem ipsum</p>
+					<input placeholder="Search ..." type="search">
+					<div data-bind="foreach: mapLocations">
+						<ul data-bind="text: $data">
 					</div>
 				</div>
 			</div>

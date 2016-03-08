@@ -13,7 +13,9 @@ function initMap() {
 };
 
 var ViewModel = function () {
+	var self=this;
 
+	this.mapLocations = ko.observableArray(['test', 'two', 'three', 'four']);
 };
 
 ko.applyBindings(new ViewModel());
