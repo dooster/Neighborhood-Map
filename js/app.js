@@ -2,12 +2,6 @@ var jeremyLocations = [
 	'test', 'poop'
 ];
 
-var savedLocations = [
-	//put this inside the ViewModel???
-];
-
-var results = [];
-
 function initMap() {
 	var map;
 	var mapOptions = {
@@ -24,6 +18,8 @@ function initMap() {
 
 var ViewModel = function () {
 	var self=this;
+
+	this.savedLocations = ko.observableArray([]);
 
 	this.fourSquareLocations = [];
 
@@ -45,7 +41,7 @@ var ViewModel = function () {
 
 	self.displayMyLoc = function() {
 		this.mapLocations.removeAll();
-		savedLocations.forEach(function(item){
+		self.savedLocations.forEach(function(item){
 			self.mapLocations.push(item)
 		});
 	};
@@ -72,6 +68,9 @@ var ViewModel = function () {
 					var venues = venue[i].venue.name;
 					self.fourSquareLocations.push(venues);
 				}
+				self.fourSquareLocations.forEach(function(item){
+					self.mapLocations.push(item)
+				});
 			});
 	})();
 };
