@@ -1,3 +1,26 @@
+
+	var config = {
+		clientId: 'Y2I0LGBKFU2FCQLC3XOQEH4CIV1R4IKT4X10CT1FPAZS2VYC',
+		clientSecret: 'HVHDQBVKYMWSV5Q45AH44VAFMRF1D5TTE41J41YRYGAZ253R',
+		authUrl: 'https://foursquare.com/',
+		apiUrl: 'https://api.foursquare.com/'
+	};
+
+	$.ajax({
+		url: 'https://api.foursquare.com/v2/venues/explore',
+		dataType: 'json',
+		data: 'll=40.7652299,-73.9187454&client_id=' + config.clientId + '&client_secret=' + config.clientSecret + '&v=20140806&m=foursquare',
+		async: true
+		}).done(function(data) {
+			venue = data.response.groups[0].items;
+			console.log(venue);
+			for (var i = 0; i < venue.length; i++){
+				var venues = venue[i].venue.name;
+				results.push(venues);
+			}
+		});
+
+
 var jeremyLocations = [
 	'test', 'poop'
 ];
@@ -6,9 +29,7 @@ var savedLocations = [
 	//put this inside the ViewModel???
 ];
 
-var results = [
-	'hi', 'ho'
-];
+var results = [];
 
 function initMap() {
 	var map;
