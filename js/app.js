@@ -19,7 +19,7 @@ function initMap() {
 var ViewModel = function () {
 	var self=this;
 
-	this.savedLocations = ko.observableArray([]);
+	this.savedLocations = ko.observableArray(['poop']);
 
 	this.fourSquareLocations = [];
 
@@ -41,7 +41,7 @@ var ViewModel = function () {
 
 	self.displayMyLoc = function() {
 		this.mapLocations.removeAll();
-		self.savedLocations.forEach(function(item){
+		self.savedLocations().forEach(function(item){
 			self.mapLocations.push(item)
 		});
 	};
