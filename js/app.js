@@ -1,5 +1,41 @@
 var jeremyLocations = [
-	'test', 'poop'
+	{
+		name: 'SingleCut Beersmiths',
+		location: {address: '19-33 37th St, Queens, NY 11105'},
+		categories: [{name: 'Brewery Bar'}]
+	}, {
+		name: 'The Local',
+		location: {address: '41-04 31st Ave, Queens, NY 11103'},
+		categories: [{name: 'Bar and Grill'}]
+	}, {
+		name: 'Yaar Indian Restaurant',
+		location: {address: '22-55 31st St, Queens, NY 11105'},
+		categories: [{name: 'Indian Restaurant'}]
+	}, {
+		name: 'Bai Sushi',
+		location: {address: '37-03 Broadway, Queens, NY 11103'},
+		categories: [{name: 'Sushi Restaurant'}]
+	}, {
+		name: 'New York City Bagel & Coffee House',
+		location: {address: '40-05 Broadway, Queens, NY 11103'},
+		categories: [{name: 'Coffee and Bagel Shop'}]
+	}, {
+		name: 'Pye Boat Noodle',
+		location: {address: '35-13 Broadway, Queens, NY 11106'},
+		categories: [{name: 'Thai Restaurant'}]
+	}, {
+		name: 'Cafe Boulis',
+		location: {address: '31-15 31st Ave, Queens, NY 11102'},
+		categories: [{name: 'Greek Bakery'}]
+	}, {
+		name: 'Bear',
+		location: {address: '12-14 31st Ave, Queens, NY 11106'},
+		categories: [{name: 'Russian Restaurant'}]
+	}, {
+		name: 'Villa Brazil',
+		location: {address: '43-16 34th Ave, Queens, NY 11101'},
+		categories: [{name: 'Brazilian Buffet'}]
+	}
 ];
 
 function initMap() {
@@ -65,8 +101,9 @@ var ViewModel = function () {
 			}).done(function(data) {
 				venue = data.response.groups[0].items;
 				for (var i = 0; i < venue.length; i++){
-					var venues = venue[i].venue.name;
+					var venues = venue[i].venue;
 					self.fourSquareLocations.push(venues);
+					console.log(venues);
 				}
 				self.fourSquareLocations.forEach(function(item){
 					self.mapLocations.push(item)
