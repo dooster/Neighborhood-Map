@@ -158,3 +158,20 @@ var ViewModel = function () {
 };
 
 ko.applyBindings(new ViewModel());
+
+/*Todo
+-add local storage
+-create ajax fail parameters
+-create search functionality
+-add extra features to search such as autocomplete
+-link ajax search results to map
+-create click event on search results that directs to pin
+-create animation for pin when clicked
+-change pin icon when selected
+-have different pins for different locations
+-create infoWindows
+-implement and link another API
+-make website responsive across all devices
+-create a Gulp workflow
+-app features thorough comments
+-create a README
