@@ -42,24 +42,15 @@ var jeremyLocations = [
 var googleMap = {
 		locations: [],
 
-		/*getLatLng: function() {
-			for (var i = 0; i < map.locations.length; i++){
-				map.myLatLng.push(map.locations[i].location);
-			}
-		},
-
-		myLatLng: [],*/
-
 		initMap: function() {
 			var map;
 			var mapOptions = {
-				disableDefaultUI: true
-			};
-
-			map = new google.maps.Map(document.getElementById('map'), {
+				disableDefaultUI: true,
 				center: {lat: 40.7652299, lng: -73.9187454},
 				zoom: 14
-			});
+			};
+
+			map = new google.maps.Map(document.getElementById('map'), mapOptions);
 		},
 
 		createMarker: function() {
@@ -68,7 +59,7 @@ var googleMap = {
 			for (i = 0; i < googleMap.locations.length; i++) {
 				marker = new google.maps.Marker({
 					position: googleMap.locations[i].location,
-					map: map
+					map: googleMap.map
 				});
 			}
 		}
