@@ -2,40 +2,40 @@ var jeremyLocations = [
 	{
 		name: 'SingleCut Beersmiths',
 		location: {lat : 40.7783129, lng : -73.9017037},
-		categories: [{name: 'Brewery Bar'}]
+		categories: {name: 'Brewery Bar'}
 	}, {
 		name: 'The Local',
 		location: {lat : 40.7608402, lng : -73.91609219999999},
-		categories: [{name: 'Bar and Grill'}]
+		categories: {name: 'Bar and Grill'}
 	}, {
 		name: 'Yaar Indian Restaurant',
 		location: {lat : 40.774797, lng : -73.911866
             },
-		categories: [{name: 'Indian Restaurant'}]
+		categories: {name: 'Indian Restaurant'}
 	}, {
 		name: 'Bai Sushi',
 		location: {lat : 40.7597557, lng : -73.92021869999999},
-		categories: [{name: 'Sushi Restaurant'}]
+		categories: {name: 'Sushi Restaurant'}
 	}, {
 		name: 'New York City Bagel & Coffee House',
 		location: {lat : 40.7589623, lng : -73.9185095},
-		categories: [{name: 'Coffee and Bagel Shop'}]
+		categories: {name: 'Coffee and Bagel Shop'}
 	}, {
 		name: 'Pye Boat Noodle',
 		location: {lat : 40.7604336, lng : -73.92156799999999},
-		categories: [{name: 'Thai Restaurant'}]
+		categories: {name: 'Thai Restaurant'}
 	}, {
 		name: 'Cafe Boulis',
 		location: {lat : 40.7646088, lng : -73.92354440000001},
-		categories: [{name: 'Greek Bakery'}]
+		categories: {name: 'Greek Bakery'}
 	}, {
 		name: 'Bear',
 		location: {lat : 40.768372, lng : -73.93303},
-		categories: [{name: 'Russian Restaurant'}]
+		categories: {name: 'Russian Restaurant'}
 	}, {
 		name: 'Villa Brazil',
 		location: {lat : 40.7551288, lng : -73.9180253},
-		categories: [{name: 'Brazilian Buffet'}]
+		categories: {name: 'Brazilian Buffet'}
 	}
 ];
 
@@ -60,8 +60,10 @@ var googleMap = {
 				center: {lat: 40.7652299, lng: -73.9187454},
 				zoom: 14
 			});
+		},
 
-			var marker, i;
+		createMarker: function() {
+			var marker, i, infoWindow;
 
 			for (i = 0; i < googleMap.locations.length; i++) {
 				marker = new google.maps.Marker({
@@ -69,9 +71,6 @@ var googleMap = {
 					map: map
 				});
 			}
-
-
-			var infoWindow;
 		}
 };
 
@@ -96,6 +95,7 @@ var ViewModel = function () {
 		jeremyLocations.forEach(function(item) {
 			self.mapLocations.push(item);
 			googleMap.locations.push(item);
+			googleMap.createMarker();
 		});
 	};
 
