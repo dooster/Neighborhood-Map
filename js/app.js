@@ -46,21 +46,19 @@ var googleMap = {
 			var map;
 			var mapOptions = {
 				disableDefaultUI: true,
-				center: {lat: 40.7652299, lng: -73.9187454},
+				center: {lat: 40.7614547802915, lng: -73.9200578197085},
 				zoom: 14
 			};
 
 			map = new google.maps.Map(document.getElementById('map'), mapOptions);
-		},
 
-		createMarker: function() {
 			var marker, i, infoWindow;
 
 			for (i = 0; i < googleMap.locations.length; i++) {
 				marker = new google.maps.Marker({
 					position: googleMap.locations[i].location,
-					map: googleMap.map
 				});
+				marker.setMap(map);
 			}
 		}
 };
@@ -86,7 +84,6 @@ var ViewModel = function () {
 		jeremyLocations.forEach(function(item) {
 			self.mapLocations.push(item);
 			googleMap.locations.push(item);
-			googleMap.createMarker();
 		});
 	};
 
@@ -107,7 +104,7 @@ var ViewModel = function () {
 		$.ajax({
 			url: config.apiUrl + 'v2/venues/explore',
 			dataType: 'json',
-			data: 'll=40.7652299,-73.9187454&client_id=' +
+			data: 'll=40.7614547802915,-73.9200578197085&radius=2000&client_id=' +
 				config.clientId +
 				'&client_secret=' +
 				config.clientSecret +
@@ -118,10 +115,11 @@ var ViewModel = function () {
 				for (var i = 0; i < venue.length; i++){
 					var venues = venue[i].venue;
 					self.fourSquareLocations.push(venues);
-					//console.log(venues);
+					console.log(venues);
 				}
 				self.fourSquareLocations.forEach(function(item){
-					self.mapLocations.push(item)
+					self.mapLocations.push(item);
+					googleMap.locations.push(item);
 				});
 			});
 	})();
