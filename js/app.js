@@ -39,28 +39,28 @@ var jeremyLocations = [
 	}
 ];
 
-var googleMap = {
-		locations: [],
 
-		initMap: function() {
-			var map;
-			var mapOptions = {
-				disableDefaultUI: true,
-				center: {lat: 40.7614547802915, lng: -73.9200578197085},
-				zoom: 14
-			};
+var googleLocations = [];
 
-			map = new google.maps.Map(document.getElementById('map'), mapOptions);
+var map, marker, i, infoWindow;
 
-			var marker, i, infoWindow;
+var initMap = function () {
+	var mapOptions = {
+		disableDefaultUI: true,
+		center: {lat: 40.7614547802915, lng: -73.9200578197085},
+		zoom: 14
+	};
 
-			for (i = 0; i < googleMap.locations.length; i++) {
-				marker = new google.maps.Marker({
-					position: googleMap.locations[i].location,
-				});
-				marker.setMap(map);
-			}
-		}
+	return map = new google.maps.Map(document.getElementById('map'), mapOptions);
+};
+
+var creatMarker = function(map) {
+	for (i = 0; i < googleLocations.length; i++) {
+		marker = new google.maps.Marker({
+			position: googleLocations[i].location,
+			map: map
+		});
+	}
 };
 
 var ViewModel = function () {
@@ -75,7 +75,7 @@ var ViewModel = function () {
 	self.displayResults = function() {
 		this.mapLocations.removeAll();
 		self.fourSquareLocations.forEach(function(item) {
-			self.mapLocations.push(item)
+			self.mapLocations.push(item);
 		});
 	};
 
@@ -83,14 +83,15 @@ var ViewModel = function () {
 		this.mapLocations.removeAll();
 		jeremyLocations.forEach(function(item) {
 			self.mapLocations.push(item);
-			googleMap.locations.push(item);
+			googleLocations.push(item);
+			creatMarker();
 		});
 	};
 
 	self.displayMyLoc = function() {
 		this.mapLocations.removeAll();
 		self.savedLocations().forEach(function(item){
-			self.mapLocations.push(item)
+			self.mapLocations.push(item);
 		});
 	};
 
@@ -115,11 +116,12 @@ var ViewModel = function () {
 				for (var i = 0; i < venue.length; i++){
 					var venues = venue[i].venue;
 					self.fourSquareLocations.push(venues);
-					console.log(venues);
+					//console.log(venues);
 				}
 				self.fourSquareLocations.forEach(function(item){
 					self.mapLocations.push(item);
-					googleMap.locations.push(item);
+					googleLocations.push(item);
+					creatMarker();
 				});
 			});
 	})();
