@@ -40,8 +40,6 @@ var jeremyLocations = [
 ];
 
 
-var googleLocations = [];
-
 var map, marker, i, infoWindow;
 
 var initMap = function () {
@@ -51,16 +49,23 @@ var initMap = function () {
 		zoom: 14
 	};
 
-	return map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	createMarker(map);
+
+	ko.applyBindings(new ViewModel());
 };
 
-var creatMarker = function(map) {
+var googleLocations = [];
+
+var createMarker = function(map) {
+
 	for (i = 0; i < googleLocations.length; i++) {
 		marker = new google.maps.Marker({
 			position: googleLocations[i].location,
 			map: map
 		});
 	}
+	console.log(googleLocations);
 };
 
 var ViewModel = function () {
@@ -84,7 +89,7 @@ var ViewModel = function () {
 		jeremyLocations.forEach(function(item) {
 			self.mapLocations.push(item);
 			googleLocations.push(item);
-			creatMarker();
+			createMarker();
 		});
 	};
 
@@ -121,13 +126,11 @@ var ViewModel = function () {
 				self.fourSquareLocations.forEach(function(item){
 					self.mapLocations.push(item);
 					googleLocations.push(item);
-					creatMarker();
+					createMarker();
 				});
 			});
 	})();
 };
-
-ko.applyBindings(new ViewModel());
 
 /*Todo
 -add local storage
