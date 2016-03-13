@@ -132,6 +132,10 @@ var ViewModel = function () {
 	})();
 };
 
+function googleError () {
+	$('#map').html("<h2>Sorry! Google Maps failed to load. Please try refreshing the page.</h2>");
+};
+
 /*Todo
 -add local storage
 -create ajax fail parameters
