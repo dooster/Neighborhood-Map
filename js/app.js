@@ -115,30 +115,33 @@ var ViewModel = function () {
 				'&client_secret=' +
 				config.clientSecret +
 				'&v=20140806&m=foursquare',
-			async: true
-			}).done(function(data) {
+			async: true,
+			success: function(data) {
 				venue = data.response.groups[0].items;
 				for (var i = 0; i < venue.length; i++){
 					var venues = venue[i].venue;
 					self.fourSquareLocations.push(venues);
-					//console.log(venues);
+					console.log(venues);
 				}
 				self.fourSquareLocations.forEach(function(item){
 					self.mapLocations.push(item);
 					googleLocations.push(item);
 					createMarker();
 				});
-			});
+			},
+			error: function(e) {
+				$('#location-list').html("<h4><p>Sorry! The FourSquare data failed to load.</p> <p>Please check your internet connection and try refreshing the page, or look at Jeremy's Recommendations.</p></h4>");
+			}
+		});
 	})();
 };
 
 function googleError () {
-	$('#map').html("<h2>Sorry! Google Maps failed to load. Please try refreshing the page.</h2>");
+	$('#map').html("<h2>Sorry! Google Maps failed to load. Please check your internet connection and try refreshing the page.</h2>");
 };
 
 /*Todo
 -add local storage
--create ajax fail parameters
 -create search functionality
 -add extra features to search such as autocomplete
 -link ajax search results to map
