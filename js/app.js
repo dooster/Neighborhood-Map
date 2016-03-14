@@ -9,13 +9,12 @@ var jeremyLocations = [
 		categories: {name: 'Bar and Grill'}
 	}, {
 		name: 'Yaar Indian Restaurant',
-		location: {lat : 40.774797, lng : -73.911866
-            },
+		location: {lat : 40.774797, lng : -73.911866},
 		categories: {name: 'Indian Restaurant'}
 	}, {
 		name: 'Bai Sushi',
 		location: {lat : 40.7597557, lng : -73.92021869999999},
-		categories: {name: 'Sushi Restaurant'}
+		categories: [{name: 'Sushi Restaurant'}]
 	}, {
 		name: 'New York City Bagel & Coffee House',
 		location: {lat : 40.7589623, lng : -73.9185095},
@@ -50,14 +49,18 @@ var initMap = function () {
 	};
 
 	map = new google.maps.Map(document.getElementById('map'), mapOptions);
-	createMarker(map);
 
 	ko.applyBindings(new ViewModel());
 };
 
-var googleLocations = [];
+var Place = function(data) {
+	this.venue = ko.observable(data.name);
+	this.location = ko.observable()
+}
 
-var createMarker = function(map) {
+//var googleLocations = [];
+
+/*var createMarker = function(map) {
 
 	for (i = 0; i < googleLocations.length; i++) {
 		marker = new google.maps.Marker({
@@ -66,25 +69,25 @@ var createMarker = function(map) {
 		});
 	}
 	console.log(googleLocations);
-};
+};*/
 
 var ViewModel = function () {
 	var self=this;
 
-	this.savedLocations = ko.observableArray([]);
+	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
 
-	this.fourSquareLocations = [];
+	this.fourSquareLocations = ko.observableArray(); //Do I need these separate arrays for each item? Can I just empty mapLocations?
 
 	this.mapLocations = ko.observableArray();
 
-	self.displayResults = function() {
+	this.displayResults = function() {
 		this.mapLocations.removeAll();
 		self.fourSquareLocations.forEach(function(item) {
 			self.mapLocations.push(item);
 		});
 	};
 
-	self.displayJerLoc = function() {
+	this.displayJerLoc = function() {
 		this.mapLocations.removeAll();
 		jeremyLocations.forEach(function(item) {
 			self.mapLocations.push(item);
@@ -93,14 +96,14 @@ var ViewModel = function () {
 		});
 	};
 
-	self.displayMyLoc = function() {
+	this.displayMyLoc = function() {
 		this.mapLocations.removeAll();
 		self.savedLocations().forEach(function(item){
 			self.mapLocations.push(item);
 		});
 	};
 
-	self.getFourSquare = (function() {
+	this.getFourSquare = (function() {
 		var config = {
 			clientId: 'Y2I0LGBKFU2FCQLC3XOQEH4CIV1R4IKT4X10CT1FPAZS2VYC',
 			clientSecret: 'HVHDQBVKYMWSV5Q45AH44VAFMRF1D5TTE41J41YRYGAZ253R',
@@ -118,22 +121,18 @@ var ViewModel = function () {
 			async: true,
 			success: function(data) {
 				venue = data.response.groups[0].items;
-				for (var i = 0; i < venue.length; i++){
-					var venues = venue[i].venue;
-					self.fourSquareLocations.push(venues);
-					console.log(venues);
-				}
-				self.fourSquareLocations.forEach(function(item){
-					self.mapLocations.push(item);
-					googleLocations.push(item);
-					createMarker();
-				});
+				console.log(data);
+				self.createLocations(venue);
 			},
 			error: function(e) {
 				$('#location-list').html("<h4><p>Sorry! The FourSquare data failed to load.</p> <p>Please check your internet connection and try refreshing the page, or look at Jeremy's Recommendations.</p></h4>");
 			}
 		});
 	})();
+
+	this.createLocations = function (venue) {
+
+	}
 };
 
 function googleError () {
