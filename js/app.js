@@ -61,7 +61,7 @@ var Place = function(object) {
 	this.lng = ko.observable(object.lng);
 	this.address = ko.observable(object.address);
 	this.categories = ko.observable(object.categories);
-}
+};
 
 //var googleLocations = [];
 
@@ -95,9 +95,8 @@ var ViewModel = function () {
 	this.displayJerLoc = function() {
 		this.mapLocations.removeAll();
 		jeremyLocations.forEach(function(item) {
-			self.mapLocations.push(item);
-			googleLocations.push(item);
-			createMarker();
+			self.mapLocations.push(new Place(item));
+			self.createMarker();
 		});
 	};
 
@@ -126,7 +125,6 @@ var ViewModel = function () {
 			async: true,
 			success: function(data) {
 				venue = data.response.groups[0].items;
-				console.log(venue);
 				self.createLocations(venue);
 			},
 			error: function(e) {
@@ -136,7 +134,7 @@ var ViewModel = function () {
 	})();
 
 	this.createLocations = function (venue) {
-		for (i = 0; i < venue.length; i++){
+		for (var i = 0; i < venue.length; i++){
 			var venue = venue[i].venue;
 			var name = venue.name;
 			var location = venue.location;
@@ -146,6 +144,15 @@ var ViewModel = function () {
 		}
 		self.createMarker();
 	}
+
+	this.createMarker = function() {
+		for (i = 0; i < self.mapLocations.length; i++) {
+		marker = new google.maps.Marker({
+			position: self.mapLocations[i].location,
+			map: map
+		});
+		}
+	};
 };
 
 function googleError () {
