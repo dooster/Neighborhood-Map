@@ -49,7 +49,6 @@ var initMap = function () {
 	};
 
 	map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
 	ko.applyBindings(new ViewModel());
 };
 
@@ -96,7 +95,7 @@ var ViewModel = function () {
 		this.mapLocations.removeAll();
 		jeremyLocations.forEach(function(item) {
 			self.mapLocations.push(new Place(item));
-			self.createMarker();
+			self.createMarker(item);
 		});
 	};
 
@@ -146,13 +145,13 @@ var ViewModel = function () {
 	}
 
 	this.createMarker = function() {
-		for (i = 0; i < self.mapLocations.length; i++) {
-		marker = new google.maps.Marker({
-			position: self.mapLocations[i].location,
-			map: map
-		});
-		}
-	};
+		self.mapLocations().forEach(function (mapLocations) {
+			marker = new google.maps.Marker({
+				position: new google.maps.LatLng(mapLocations.lat(), mapLocations.lng()),
+				map: map
+			});
+		})
+	}
 };
 
 function googleError () {
