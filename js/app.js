@@ -1,40 +1,40 @@
 var jeremyLocations = [
 	{
 		name: 'SingleCut Beersmiths',
-		location: {lat : 40.7783129, lng : -73.9017037},
-		categories: {name: 'Brewery Bar'}
+		location: {address: '19-33 37th St, New York, NY 11105', lat : 40.7783129, lng : -73.9017037},
+		categories: [{name: 'Brewery Bar'}]
 	}, {
-		name: 'The Local',
-		location: {lat : 40.7608402, lng : -73.91609219999999},
-		categories: {name: 'Bar and Grill'}
+		name: "Doyle's Corner",
+		location: {address: '4202 Broadway, Astoria, NY 11103', lat : 40.7580005, lng : -73.91735629999999},
+		categories: [{name: 'Bar and Grill'}]
 	}, {
 		name: 'Yaar Indian Restaurant',
-		location: {lat : 40.774797, lng : -73.911866},
-		categories: {name: 'Indian Restaurant'}
+		location: {address: '22-55 31st St, New York, 11105', lat : 40.774797, lng : -73.911866},
+		categories: [{name: 'Indian Restaurant'}]
 	}, {
 		name: 'Bai Sushi',
-		location: {lat : 40.7597557, lng : -73.92021869999999},
+		location: {address: '37-03 Broadway, Astoria, NY 11103', lat : 40.7597557, lng : -73.92021869999999},
 		categories: [{name: 'Sushi Restaurant'}]
 	}, {
 		name: 'New York City Bagel & Coffee House',
-		location: {lat : 40.7589623, lng : -73.9185095},
-		categories: {name: 'Coffee and Bagel Shop'}
+		location: {address: '40-05 Broadway, Queens, NY 11103', lat : 40.7589623, lng : -73.9185095},
+		categories: [{name: 'Coffee and Bagel Shop'}]
 	}, {
 		name: 'Pye Boat Noodle',
-		location: {lat : 40.7604336, lng : -73.92156799999999},
-		categories: {name: 'Thai Restaurant'}
+		location: {address: '35-13 Broadway, New York, NY 11106', lat : 40.7604336, lng : -73.92156799999999},
+		categories: [{name: 'Thai Restaurant'}]
 	}, {
 		name: 'Cafe Boulis',
-		location: {lat : 40.7646088, lng : -73.92354440000001},
-		categories: {name: 'Greek Bakery'}
+		location: {address: '31-15 31st Ave, Astoria, NY 11102', lat : 40.7646088, lng : -73.92354440000001},
+		categories: [{name: 'Greek Bakery'}]
 	}, {
 		name: 'Bear',
-		location: {lat : 40.768372, lng : -73.93303},
-		categories: {name: 'Russian Restaurant'}
+		location: {address: '12-14 31st Ave, Astoria, NY 11106', lat : 40.768372, lng : -73.93303},
+		categories: [{name: 'Russian Restaurant'}]
 	}, {
 		name: 'Villa Brazil',
-		location: {lat : 40.7551288, lng : -73.9180253},
-		categories: {name: 'Brazilian Buffet'}
+		location: {address: '43-16 34th Ave, Long Island City, NY 11101', lat : 40.7551288, lng : -73.9180253},
+		categories: [{name: 'Brazilian Buffet'}]
 	}
 ];
 
@@ -53,9 +53,14 @@ var initMap = function () {
 	ko.applyBindings(new ViewModel());
 };
 
-var Place = function(data) {
-	this.venue = ko.observable(data.name);
-	this.location = ko.observable()
+//Create a master Place constuctor function to allow creation of all venue data necessary.
+//Created with help from https://discussions.udacity.com/t/having-trouble-accessing-data-outside-an-ajax-request/39072/11
+var Place = function(object) {
+	this.venue = ko.observable(object.name);
+	this.lat = ko.observable(object.lat);
+	this.lng = ko.observable(object.lng);
+	this.address = ko.observable(object.address);
+	this.categories = ko.observable(object.categories);
 }
 
 //var googleLocations = [];
@@ -121,7 +126,7 @@ var ViewModel = function () {
 			async: true,
 			success: function(data) {
 				venue = data.response.groups[0].items;
-				console.log(data);
+				console.log(venue);
 				self.createLocations(venue);
 			},
 			error: function(e) {
@@ -131,7 +136,15 @@ var ViewModel = function () {
 	})();
 
 	this.createLocations = function (venue) {
-
+		for (i = 0; i < venue.length; i++){
+			var venue = venue[i].venue;
+			var name = venue.name;
+			var location = venue.location;
+			var category = venue.categories[0].name;
+			var object = {name: name, lat: location.lat, lng: location.lng, category: category};
+			self.mapLocations.push(new Place(object));
+		}
+		self.createMarker();
 	}
 };
 
