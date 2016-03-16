@@ -80,23 +80,21 @@ var ViewModel = function () {
 
 	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
 
-	this.fourSquareLocations = ko.observableArray(); //Do I need these separate arrays for each item? Can I just empty mapLocations?
+	//this.fourSquareLocations = ko.observableArray(); //Do I need these separate arrays for each item? Can I just empty mapLocations?
 
 	this.mapLocations = ko.observableArray();
 
 	this.displayResults = function() {
 		this.mapLocations.removeAll();
-		self.fourSquareLocations.forEach(function(item) {
-			self.mapLocations.push(item);
-		});
+		this.createLocations();
 	};
 
 	this.displayJerLoc = function() {
 		this.mapLocations.removeAll();
-		jeremyLocations.forEach(function(item) {
-			self.mapLocations.push(new Place(item));
-			self.createMarker(item);
+		jeremyLocations.forEach(function(item){
+			self.mapLocations.push(new Place(item))
 		});
+		self.createLocalMaker();
 	};
 
 	this.displayMyLoc = function() {
@@ -132,6 +130,7 @@ var ViewModel = function () {
 		});
 	})();
 
+	//partially based off of the discussion at https://discussions.udacity.com/t/p5-status-check-in/29104
 	this.createLocations = function (venue) {
 		for (var i = 0; i < venue.length; i++){
 			var venue = venue[i].venue;
@@ -143,15 +142,26 @@ var ViewModel = function () {
 		}
 		self.createMarker();
 	}
-
+	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	this.createMarker = function() {
 		self.mapLocations().forEach(function (mapLocations) {
 			marker = new google.maps.Marker({
 				position: new google.maps.LatLng(mapLocations.lat(), mapLocations.lng()),
-				map: map
+				map: map,
+				animation: google.maps.Animation.DROP
 			});
 		})
-	}
+	};
+
+	this.createLocalMaker = function() {
+		self.mapLocations().forEach(function (mapLocations) {
+			marker = new google.maps.Marker({
+				position: new google.maps.LatLng(mapLocations[1], mapLocations[2]),
+				map: map,
+				animation: google.maps.Animation.DROP
+			});
+		})
+	};
 };
 
 function googleError () {
