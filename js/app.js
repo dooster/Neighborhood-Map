@@ -117,7 +117,7 @@ var ViewModel = function () {
 		$.ajax({
 			url: config.apiUrl + 'v2/venues/explore',
 			dataType: 'json',
-			data: 'll=40.7614547802915,-73.9200578197085&radius=2000&client_id=' +
+			data: 'll=40.7614547802915,-73.9200578197085&radius=2000&section=food&client_id=' +
 				config.clientId +
 				'&client_secret=' +
 				config.clientSecret +
@@ -150,16 +150,18 @@ var ViewModel = function () {
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	var fourSquareMarker = [];
 	this.createMarker = function() {
-		self.mapLocations().forEach(function (mapLocations) {
-			marker = new google.maps.Marker({
-				position: new google.maps.LatLng(mapLocations.lat(), mapLocations.lng()),
-				map: map,
-				animation: google.maps.Animation.DROP
-			});
-			fourSquareMarker.push(marker);
-			console.log(fourSquareMarker);
-			marker.addListener('click', self.toggleBounce);
-		})
+		setTimeout(function() {
+				self.mapLocations().forEach(function (mapLocations) {
+				marker = new google.maps.Marker({
+					position: new google.maps.LatLng(mapLocations.lat(), mapLocations.lng()),
+					map: map,
+					animation: google.maps.Animation.DROP
+				});
+				fourSquareMarker.push(marker);
+				console.log(fourSquareMarker);
+				marker.addListener('click', self.toggleBounce);
+			})
+		}, 8000);
 	};
 
 	this.createJeremyLocations = function (loc) {
@@ -243,7 +245,6 @@ function googleError () {
 -create search functionality
 -add extra features to search such as autocomplete
 -create click event on search results that directs to pin
--create animation for pin when clicked
 -change pin icon when selected
 -create infoWindows
 -implement and link another API
