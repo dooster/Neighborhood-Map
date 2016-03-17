@@ -39,17 +39,15 @@ var ViewModel = function () {
 
 	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
 
-	//this.fourSquareLocations = ko.observableArray(); //Do I need these separate arrays for each item? Can I just empty mapLocations?
-
 	this.mapLocations = ko.observableArray();
 
 	this.displayResults = function() {
-		this.mapLocations.removeAll();
-		this.createLocations();
+		self.mapLocations.removeAll();
+		this.getFourSquare();
 	};
 
 	this.displayJerLoc = function() {
-		this.mapLocations.removeAll();
+		self.mapLocations.removeAll();
 		var jeremyLocations = [
 			{ venue: {
 					name: 'SingleCut Beersmiths',
@@ -98,7 +96,7 @@ var ViewModel = function () {
 				}
 			}
 		];
-		self.createLocations(jeremyLocations);
+		self.createJeremyLocations(jeremyLocations);
 	};
 
 	this.displayMyLoc = function() {
@@ -108,7 +106,7 @@ var ViewModel = function () {
 		});
 	};
 
-	this.getFourSquare = (function() {
+	this.getFourSquare = function() {
 		var config = {
 			clientId: 'Y2I0LGBKFU2FCQLC3XOQEH4CIV1R4IKT4X10CT1FPAZS2VYC',
 			clientSecret: 'HVHDQBVKYMWSV5Q45AH44VAFMRF1D5TTE41J41YRYGAZ253R',
@@ -133,12 +131,13 @@ var ViewModel = function () {
 				$('#location-list').html("<h4><p>Sorry! The FourSquare data failed to load.</p> <p>Please check your internet connection and try refreshing the page, or look at Jeremy's Recommendations.</p></h4>");
 			}
 		});
-	})();
+	};
+	this.getFourSquare();
 
 	//partially based off of the discussion at https://discussions.udacity.com/t/p5-status-check-in/29104
-	this.createLocations = function (venue) {
-		for (var i = 0; i < venue.length; i++){
-			var venue = venue[i].venue;
+	this.createLocations = function (loc) {
+		for (var i = 0; i < loc.length; i++){
+			var venue = loc[i].venue;
 			console.log(venue);
 			var name = venue.name;
 			var location = venue.location;
@@ -147,7 +146,7 @@ var ViewModel = function () {
 			self.mapLocations.push(new Place(object));
 		}
 		self.createMarker();
-	}
+	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	this.createMarker = function() {
 		self.mapLocations().forEach(function (mapLocations) {
@@ -159,12 +158,27 @@ var ViewModel = function () {
 		})
 	};
 
-	this.createLocalMaker = function() {
+	this.createJeremyLocations = function (loc) {
+		for (var i = 0; i < loc.length; i++){
+			var venue = loc[i].venue;
+			console.log(venue);
+			var name = venue.name;
+			var location = venue.location;
+			var category = venue.categories[0].name;
+			var object = {name: name, lat: location.lat, lng: location.lng, category: category};
+			self.mapLocations.push(new Place(object));
+		}
+		self.createJeremyMarker();
+	};
+
+	this.createJeremyMarker = function() {
 		self.mapLocations().forEach(function (mapLocations) {
 			marker = new google.maps.Marker({
-				position: new google.maps.LatLng(mapLocations[1], mapLocations[2]),
+				position: new google.maps.LatLng(mapLocations.lat(), mapLocations.lng()),
 				map: map,
-				animation: google.maps.Animation.DROP
+				animation: google.maps.Animation.DROP,
+				icon: 'img/1458190296_location_3-03.svg'
+				//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
 			});
 		})
 	};
