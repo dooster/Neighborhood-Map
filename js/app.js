@@ -96,6 +96,7 @@ var ViewModel = function () {
 				}
 			}
 		];
+		self.deleteFourSquareMarkers();
 		self.createJeremyLocations(jeremyLocations);
 	};
 
@@ -124,6 +125,7 @@ var ViewModel = function () {
 			async: true,
 			success: function(data) {
 				venue = data.response.groups[0].items;
+				self.deleteJeremyMarkers();
 				self.createLocations(venue);
 			},
 			error: function(e) {
@@ -146,6 +148,7 @@ var ViewModel = function () {
 		self.createMarker();
 	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
+	var fourSquareMarker = [];
 	this.createMarker = function() {
 		self.mapLocations().forEach(function (mapLocations) {
 			marker = new google.maps.Marker({
@@ -153,6 +156,8 @@ var ViewModel = function () {
 				map: map,
 				animation: google.maps.Animation.DROP
 			});
+			fourSquareMarker.push(marker);
+			console.log(fourSquareMarker);
 			marker.addListener('click', self.toggleBounce);
 		})
 	};
@@ -169,6 +174,7 @@ var ViewModel = function () {
 		self.createJeremyMarker();
 	};
 
+	var jeremyMarker = [];
 	this.createJeremyMarker = function() {
 		self.mapLocations().forEach(function (mapLocations) {
 			marker = new google.maps.Marker({
@@ -178,6 +184,7 @@ var ViewModel = function () {
 				icon: 'img/1458190296_location_3-03.svg'
 				//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
 			});
+			jeremyMarker.push(marker);
 			marker.addListener('click', self.toggleBounce);
 		})
 	};
@@ -192,6 +199,38 @@ var ViewModel = function () {
 			marker.setAnimation(null);
 		}, 1500);
 	};
+
+	this.setFourSquareMap = function(map) {
+		for (var i = 0; i < fourSquareMarker.length; i++) {
+			fourSquareMarker[i].setMap(map);
+		}
+	};
+
+	this.clearFourSquareMarkers = function () {
+		self.setFourSquareMap(null);
+	};
+
+	this.deleteFourSquareMarkers = function() {
+		self.clearFourSquareMarkers();
+		fourSquareMarker = [];
+		console.log(fourSquareMarker);
+	};
+
+	this.setJeremyMap = function(map) {
+		for (var i = 0; i < jeremyMarker.length; i++) {
+			jeremyMarker[i].setMap(map);
+		}
+	};
+
+	this.clearJeremyMarkers = function () {
+		self.setJeremyMap(null);
+	};
+
+	this.deleteJeremyMarkers = function() {
+		self.clearJeremyMarkers();
+		jeremyMarker = [];
+	};
+
 };
 
 function googleError () {
