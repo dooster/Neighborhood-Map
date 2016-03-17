@@ -124,7 +124,6 @@ var ViewModel = function () {
 			async: true,
 			success: function(data) {
 				venue = data.response.groups[0].items;
-				console.log(venue);
 				self.createLocations(venue);
 			},
 			error: function(e) {
@@ -138,7 +137,6 @@ var ViewModel = function () {
 	this.createLocations = function (loc) {
 		for (var i = 0; i < loc.length; i++){
 			var venue = loc[i].venue;
-			console.log(venue);
 			var name = venue.name;
 			var location = venue.location;
 			var category = venue.categories[0].name;
@@ -155,13 +153,13 @@ var ViewModel = function () {
 				map: map,
 				animation: google.maps.Animation.DROP
 			});
+			marker.addListener('click', self.toggleBounce);
 		})
 	};
 
 	this.createJeremyLocations = function (loc) {
 		for (var i = 0; i < loc.length; i++){
 			var venue = loc[i].venue;
-			console.log(venue);
 			var name = venue.name;
 			var location = venue.location;
 			var category = venue.categories[0].name;
@@ -180,7 +178,19 @@ var ViewModel = function () {
 				icon: 'img/1458190296_location_3-03.svg'
 				//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
 			});
+			marker.addListener('click', self.toggleBounce);
 		})
+	};
+
+	this.toggleBounce = function() {
+		if (marker.getAnimation() !== null) {
+			marker.setAnimation(null);
+		} else {
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		}
+		setTimeout(function() {
+			marker.setAnimation(null);
+		}, 1500);
 	};
 };
 
@@ -189,14 +199,13 @@ function googleError () {
 };
 
 /*Todo
+-add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
 -add local storage
 -create search functionality
 -add extra features to search such as autocomplete
--link ajax search results to map
 -create click event on search results that directs to pin
 -create animation for pin when clicked
 -change pin icon when selected
--have different pins for different locations
 -create infoWindows
 -implement and link another API
 -make website responsive across all devices
