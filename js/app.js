@@ -21,29 +21,17 @@ var Place = function(object) {
 	this.categories = ko.observable(object.categories);
 };
 
-//var googleLocations = [];
-
-/*var createMarker = function(map) {
-
-	for (i = 0; i < googleLocations.length; i++) {
-		marker = new google.maps.Marker({
-			position: googleLocations[i].location,
-			map: map
-		});
-	}
-	console.log(googleLocations);
-};*/
-
 var ViewModel = function () {
 	var self=this;
 
 	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
-
+	this.fourSquareLocations = [];
 	this.mapLocations = ko.observableArray();
 
 	this.displayResults = function() {
 		self.mapLocations.removeAll();
-		this.getFourSquare();
+		self.clearJeremyMarkers();
+		this.createMarker();
 	};
 
 	this.displayJerLoc = function() {
@@ -96,7 +84,7 @@ var ViewModel = function () {
 				}
 			}
 		];
-		self.deleteFourSquareMarkers();
+		self.clearFourSquareMarkers();
 		self.createJeremyLocations(jeremyLocations);
 	};
 
@@ -125,7 +113,7 @@ var ViewModel = function () {
 			async: true,
 			success: function(data) {
 				venue = data.response.groups[0].items;
-				self.deleteJeremyMarkers();
+				self.clearJeremyMarkers();
 				self.createLocations(venue);
 			},
 			error: function(e) {
@@ -144,24 +132,23 @@ var ViewModel = function () {
 			var category = venue.categories[0].name;
 			var object = {name: name, lat: location.lat, lng: location.lng, category: category};
 			self.mapLocations.push(new Place(object));
+			self.fourSquareLocations.push(new Place(object));
 		}
 		self.createMarker();
 	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	var fourSquareMarker = [];
 	this.createMarker = function() {
-		setTimeout(function() {
-				self.mapLocations().forEach(function (mapLocations) {
-				marker = new google.maps.Marker({
-					position: new google.maps.LatLng(mapLocations.lat(), mapLocations.lng()),
-					map: map,
-					animation: google.maps.Animation.DROP
-				});
-				fourSquareMarker.push(marker);
-				console.log(fourSquareMarker);
-				marker.addListener('click', self.toggleBounce);
-			})
-		}, 8000);
+		self.fourSquareLocations.forEach(function (fourSquareLocations) {
+			self.mapLocations.push(fourSquareLocations);
+			marker = new google.maps.Marker({
+				position: new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng()),
+				map: map,
+				animation: google.maps.Animation.DROP
+			});
+			fourSquareMarker.push(marker);
+			marker.addListener('click', self.toggleBounce);
+		})
 	};
 
 	this.createJeremyLocations = function (loc) {
@@ -212,11 +199,11 @@ var ViewModel = function () {
 		self.setFourSquareMap(null);
 	};
 
-	this.deleteFourSquareMarkers = function() {
+	/*this.deleteFourSquareMarkers = function() {
 		self.clearFourSquareMarkers();
 		fourSquareMarker = [];
 		console.log(fourSquareMarker);
-	};
+	};*/
 
 	this.setJeremyMap = function(map) {
 		for (var i = 0; i < jeremyMarker.length; i++) {
@@ -228,10 +215,10 @@ var ViewModel = function () {
 		self.setJeremyMap(null);
 	};
 
-	this.deleteJeremyMarkers = function() {
+	/*this.deleteJeremyMarkers = function() {
 		self.clearJeremyMarkers();
 		jeremyMarker = [];
-	};
+	};*/
 
 };
 
@@ -241,6 +228,7 @@ function googleError () {
 
 /*Todo
 -add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
+-settimeout drop google markers
 -add local storage
 -create search functionality
 -add extra features to search such as autocomplete
