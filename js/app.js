@@ -4,10 +4,19 @@ var initMap = function () {
 	var mapOptions = {
 		disableDefaultUI: true,
 		center: {lat: 40.7614547802915, lng: -73.9200578197085},
-		zoom: 14
 	};
 
 	map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+	var bounds = {
+		north: 40.782769,
+		south: 40.753547,
+		east: -73.897018,
+		west: -73.942808
+	};
+
+	map.fitBounds(bounds);
+
 	ko.applyBindings(new ViewModel());
 };
 
@@ -199,12 +208,6 @@ var ViewModel = function () {
 		self.setFourSquareMap(null);
 	};
 
-	/*this.deleteFourSquareMarkers = function() {
-		self.clearFourSquareMarkers();
-		fourSquareMarker = [];
-		console.log(fourSquareMarker);
-	};*/
-
 	this.setJeremyMap = function(map) {
 		for (var i = 0; i < jeremyMarker.length; i++) {
 			jeremyMarker[i].setMap(map);
@@ -214,12 +217,6 @@ var ViewModel = function () {
 	this.clearJeremyMarkers = function () {
 		self.setJeremyMap(null);
 	};
-
-	/*this.deleteJeremyMarkers = function() {
-		self.clearJeremyMarkers();
-		jeremyMarker = [];
-	};*/
-
 };
 
 function googleError () {
@@ -227,6 +224,7 @@ function googleError () {
 };
 
 /*Todo
+-add 4square attribution
 -add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
 -settimeout drop google markers
 -add local storage
