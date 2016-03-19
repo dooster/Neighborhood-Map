@@ -34,7 +34,7 @@ var ViewModel = function () {
 	var self=this;
 
 	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
-	this.fourSquareLocations = [];
+	var fourSquareLocations = [];
 	this.mapLocations = ko.observableArray();
 
 	this.displayResults = function() {
@@ -141,14 +141,22 @@ var ViewModel = function () {
 			var category = venue.categories[0].name;
 			var object = {name: name, lat: location.lat, lng: location.lng, category: category};
 			self.mapLocations.push(new Place(object));
-			self.fourSquareLocations.push(new Place(object));
+			fourSquareLocations.push(new Place(object));
+			console.log(fourSquareLocations);
 		}
-		self.createMarker();
+		self.createMarker(map, fourSquareLocations);
 	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	var fourSquareMarker = [];
-	this.createMarker = function() {
-		self.fourSquareLocations.forEach(function (fourSquareLocations) {
+	this.createMarker = function(map, fourSquareLocations) {
+		for (var i = 0; i < fourSquareLocations.length; i++) {
+			(function (fourSquareLocations) {
+				var myLatLng = new google.maps.LatLng(fourSquareLocations[i][2], fourSquareLocations[i][3]);
+				var marker = new google.maps.Marker({position: myLatLng, map: map, clickable: true})
+				google.maps.event.addListener(marker, 'click', self.toggleBounce(marker));
+			}(fourSquareLocations[i]));
+		}
+		/*self.fourSquareLocations.forEach(function (fourSquareLocations) {
 			self.mapLocations.push(fourSquareLocations);
 			marker = new google.maps.Marker({
 				position: new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng()),
@@ -157,7 +165,7 @@ var ViewModel = function () {
 			});
 			fourSquareMarker.push(marker);
 			marker.addListener('click', self.toggleBounce);
-		})
+		})*/
 	};
 
 	this.createJeremyLocations = function (loc) {
@@ -187,7 +195,7 @@ var ViewModel = function () {
 		})
 	};
 
-	this.toggleBounce = function() {
+	this.toggleBounce = function(marker) {
 		if (marker.getAnimation() !== null) {
 			marker.setAnimation(null);
 		} else {
@@ -224,8 +232,6 @@ function googleError () {
 };
 
 /*Todo
--add 4square attribution
--add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
 -settimeout drop google markers
 -add local storage
 -create search functionality
@@ -238,4 +244,7 @@ function googleError () {
 -create a Gulp workflow
 -app features thorough comments
 -create a README
+
+-add 4square attribution https://developer.foursquare.com/overview/attribution
+-add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
 */
