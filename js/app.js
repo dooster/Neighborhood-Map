@@ -32,7 +32,7 @@ var Place = function(object) {
 
 var ViewModel = function () {
 	var self=this;
-	var jeremyLocations = [
+	/*var jeremyLocations = [
 		{ venue: {
 				name: 'SingleCut Beersmiths',
 				location: {address: '19-33 37th St, New York, NY 11105', lat : 40.7783129, lng : -73.9017037},
@@ -79,8 +79,54 @@ var ViewModel = function () {
 				categories: [{name: 'Brazilian Buffet'}]
 			}
 		}
-	];
-	var formattedJeremyLocations = [];
+	];*/
+	var formattedJeremyLocations = [
+		{
+			venue: 'SingleCut Beersmiths',
+			lat : 40.7783129,
+			lng : -73.9017037,
+			categories:'Brewery Bar'
+		}, {
+			venue: "Doyle's Corner",
+			lat : 40.7580005,
+			lng : -73.91735629999999,
+			categories: 'Bar and Grill'
+		}, {
+			venue: 'Yaar Indian Restaurant',
+			lat : 40.774797,
+			lng : -73.911866,
+			categories: 'Indian Restaurant'
+		}, {
+			venue: 'Bai Sushi',
+			lat : 40.7597557,
+			lng : -73.92021869999999,
+			categories: 'Sushi Restaurant'
+		}, {
+			venue: 'New York City Bagel & Coffee House',
+			lat : 40.7589623,
+			lng : -73.9185095,
+			categories:'Coffee and Bagel Shop'
+		}, {
+			venue: 'Pye Boat Noodle',
+			lat : 40.7604336,
+			lng : -73.92156799999999,
+			categories: 'Thai Restaurant'
+		}, {
+			venue: 'Cafe Boulis',
+			lat : 40.7646088,
+			lng : -73.92354440000001,
+			categories: 'Greek Bakery'
+		}, {
+			venue: 'Bear',
+			lat : 40.768372,
+			lng : -73.93303,
+			categories: 'Russian Restaurant'
+		}, {
+			venue: 'Villa Brazil',
+			lat : 40.7551288,
+			lng : -73.9180253,
+			categories:'Brazilian Buffet'
+		}];
 	var fourSquareLocations = [];
 
 	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
@@ -95,7 +141,8 @@ var ViewModel = function () {
 	this.displayJerLoc = function() {
 		self.mapLocations.removeAll();
 		self.clearFourSquareMarkers();
-		self.createJeremyLocations(jeremyLocations);
+		//self.createJeremyLocations(jeremyLocations);
+		self.createJeremyMarker(map, formattedJeremyLocations);
 	};
 
 	this.displayMyLoc = function() {
@@ -153,7 +200,8 @@ var ViewModel = function () {
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
 				var myLatLng = new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng());
-				var marker = new google.maps.Marker({position: myLatLng,
+				var marker = new google.maps.Marker({
+					position: myLatLng,
 					map: map,
 					clickable: true,
 					animation: google.maps.Animation.DROP
@@ -184,7 +232,7 @@ var ViewModel = function () {
 		})*/
 	};
 
-	this.createJeremyLocations = function (loc) {
+	/*this.createJeremyLocations = function (loc) {
 		for (var i = 0; i < loc.length; i++){
 			var venue = loc[i].venue;
 			var name = venue.name;
@@ -195,22 +243,24 @@ var ViewModel = function () {
 			formattedJeremyLocations.push(new Place(object));
 		}
 		self.createJeremyMarker(map, formattedJeremyLocations);
-	};
+	};*/
 
 	var jeremyMarker = [];
 	this.createJeremyMarker = function(map, jeremyLocations) {
 		for (var i = 0; i < jeremyLocations.length; i++) {
-			var loc = jeremyLocations[i].venue.location;
+			var loc = jeremyLocations[i];
+			self.mapLocations.push(loc);
 			(function (loc) {
-				var myLatLng = new google.maps.LatLng(loc.lat(), loc.lng());
-				var marker = new google.maps.Marker({position: myLatLng,
+				var myLatLng = new google.maps.LatLng(loc.lat, loc.lng);
+				var marker = new google.maps.Marker({
+					position: myLatLng,
 					map: map, clickable: true,
 					animation: google.maps.Animation.DROP,
 					icon: 'img/1458190296_location_3-03.svg'
 					//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
 				});
 				jeremyMarker.push(marker);
-				self.mapLocations.push(jeremyLocations);
+				//self.mapLocations.push(jeremyLocations);
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
 						marker.setAnimation(null);
@@ -237,7 +287,7 @@ var ViewModel = function () {
 		})*/
 	};
 
-	this.toggleBounce = function(marker) {
+	/*this.toggleBounce = function(marker) {
 		if (marker.getAnimation() !== null) {
 			marker.setAnimation(null);
 		} else {
@@ -246,7 +296,7 @@ var ViewModel = function () {
 		setTimeout(function() {
 			marker.setAnimation(null);
 		}, 1500);
-	};
+	};*/
 
 	this.setFourSquareMap = function(map) {
 		for (var i = 0; i < fourSquareMarker.length; i++) {
@@ -289,4 +339,6 @@ function googleError () {
 
 -add 4square attribution https://developer.foursquare.com/overview/attribution
 -add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
+
+-add Jeremy vs Jen locations
 */
