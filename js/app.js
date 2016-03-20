@@ -40,7 +40,7 @@ var ViewModel = function () {
 	this.displayResults = function() {
 		self.mapLocations.removeAll();
 		self.clearJeremyMarkers();
-		this.createMarker();
+		this.createMarker(map, fourSquareLocations);
 	};
 
 	this.displayJerLoc = function() {
@@ -147,12 +147,15 @@ var ViewModel = function () {
 		self.createMarker(map, fourSquareLocations);
 	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
+	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	var fourSquareMarker = [];
 	this.createMarker = function(map, fourSquareLocations) {
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
 				var myLatLng = new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng());
-				var marker = new google.maps.Marker({position: myLatLng, map: map, clickable: true})
+				var marker = new google.maps.Marker({position: myLatLng, map: map, clickable: true});
+				self.mapLocations.push(fourSquareLocations);
+				fourSquareMarker.push(marker);
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
 						marker.setAnimation(null);
@@ -162,7 +165,7 @@ var ViewModel = function () {
 					setTimeout(function() {
 						marker.setAnimation(null);
 					}, 2000);
-				});
+				}, false);
 			}(fourSquareLocations[i]));
 		}
 		/*self.fourSquareLocations.forEach(function (fourSquareLocations) {
