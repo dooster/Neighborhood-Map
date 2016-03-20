@@ -151,9 +151,18 @@ var ViewModel = function () {
 	this.createMarker = function(map, fourSquareLocations) {
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
-				var myLatLng = new google.maps.LatLng(fourSquareLocations[i][2], fourSquareLocations[i][3]);
+				var myLatLng = new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng());
 				var marker = new google.maps.Marker({position: myLatLng, map: map, clickable: true})
-				google.maps.event.addListener(marker, 'click', self.toggleBounce(marker));
+				google.maps.event.addListener(marker, 'click', function() {
+					if (marker.getAnimation() !== null) {
+						marker.setAnimation(null);
+					} else {
+						marker.setAnimation(google.maps.Animation.BOUNCE);
+					}
+					setTimeout(function() {
+						marker.setAnimation(null);
+					}, 2000);
+				});
 			}(fourSquareLocations[i]));
 		}
 		/*self.fourSquareLocations.forEach(function (fourSquareLocations) {
