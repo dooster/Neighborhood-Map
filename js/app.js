@@ -32,9 +32,58 @@ var Place = function(object) {
 
 var ViewModel = function () {
 	var self=this;
+	var jeremyLocations = [
+		{ venue: {
+				name: 'SingleCut Beersmiths',
+				location: {address: '19-33 37th St, New York, NY 11105', lat : 40.7783129, lng : -73.9017037},
+				categories: [{name: 'Brewery Bar'}]
+			}
+		}, { venue: {
+				name: "Doyle's Corner",
+				location: {address: '4202 Broadway, Astoria, NY 11103', lat : 40.7580005, lng : -73.91735629999999},
+				categories: [{name: 'Bar and Grill'}]
+			}
+		}, { venue: {
+				name: 'Yaar Indian Restaurant',
+				location: {address: '22-55 31st St, New York, 11105', lat : 40.774797, lng : -73.911866},
+				categories: [{name: 'Indian Restaurant'}]
+			}
+		}, { venue: {
+				name: 'Bai Sushi',
+				location: {address: '37-03 Broadway, Astoria, NY 11103', lat : 40.7597557, lng : -73.92021869999999},
+				categories: [{name: 'Sushi Restaurant'}]
+			}
+		}, { venue: {
+				name: 'New York City Bagel & Coffee House',
+				location: {address: '40-05 Broadway, Queens, NY 11103', lat : 40.7589623, lng : -73.9185095},
+				categories: [{name: 'Coffee and Bagel Shop'}]
+			}
+		}, { venue: {
+				name: 'Pye Boat Noodle',
+				location: {address: '35-13 Broadway, New York, NY 11106', lat : 40.7604336, lng : -73.92156799999999},
+				categories: [{name: 'Thai Restaurant'}]
+			}
+		}, { venue: {
+				name: 'Cafe Boulis',
+				location: {address: '31-15 31st Ave, Astoria, NY 11102', lat : 40.7646088, lng : -73.92354440000001},
+				categories: [{name: 'Greek Bakery'}]
+			}
+		}, { venue: {
+				name: 'Bear',
+				location: {address: '12-14 31st Ave, Astoria, NY 11106', lat : 40.768372, lng : -73.93303},
+				categories: [{name: 'Russian Restaurant'}]
+			}
+		}, { venue: {
+				name: 'Villa Brazil',
+				location: {address: '43-16 34th Ave, Long Island City, NY 11101', lat : 40.7551288, lng : -73.9180253},
+				categories: [{name: 'Brazilian Buffet'}]
+			}
+		}
+	];
+	var formattedJeremyLocations = [];
+	var fourSquareLocations = [];
 
 	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
-	var fourSquareLocations = [];
 	this.mapLocations = ko.observableArray();
 
 	this.displayResults = function() {
@@ -45,54 +94,6 @@ var ViewModel = function () {
 
 	this.displayJerLoc = function() {
 		self.mapLocations.removeAll();
-		var jeremyLocations = [
-			{ venue: {
-					name: 'SingleCut Beersmiths',
-					location: {address: '19-33 37th St, New York, NY 11105', lat : 40.7783129, lng : -73.9017037},
-					categories: [{name: 'Brewery Bar'}]
-				}
-			}, { venue: {
-					name: "Doyle's Corner",
-					location: {address: '4202 Broadway, Astoria, NY 11103', lat : 40.7580005, lng : -73.91735629999999},
-					categories: [{name: 'Bar and Grill'}]
-				}
-			}, { venue: {
-					name: 'Yaar Indian Restaurant',
-					location: {address: '22-55 31st St, New York, 11105', lat : 40.774797, lng : -73.911866},
-					categories: [{name: 'Indian Restaurant'}]
-				}
-			}, { venue: {
-					name: 'Bai Sushi',
-					location: {address: '37-03 Broadway, Astoria, NY 11103', lat : 40.7597557, lng : -73.92021869999999},
-					categories: [{name: 'Sushi Restaurant'}]
-				}
-			}, { venue: {
-					name: 'New York City Bagel & Coffee House',
-					location: {address: '40-05 Broadway, Queens, NY 11103', lat : 40.7589623, lng : -73.9185095},
-					categories: [{name: 'Coffee and Bagel Shop'}]
-				}
-			}, { venue: {
-					name: 'Pye Boat Noodle',
-					location: {address: '35-13 Broadway, New York, NY 11106', lat : 40.7604336, lng : -73.92156799999999},
-					categories: [{name: 'Thai Restaurant'}]
-				}
-			}, { venue: {
-					name: 'Cafe Boulis',
-					location: {address: '31-15 31st Ave, Astoria, NY 11102', lat : 40.7646088, lng : -73.92354440000001},
-					categories: [{name: 'Greek Bakery'}]
-				}
-			}, { venue: {
-					name: 'Bear',
-					location: {address: '12-14 31st Ave, Astoria, NY 11106', lat : 40.768372, lng : -73.93303},
-					categories: [{name: 'Russian Restaurant'}]
-				}
-			}, { venue: {
-					name: 'Villa Brazil',
-					location: {address: '43-16 34th Ave, Long Island City, NY 11101', lat : 40.7551288, lng : -73.9180253},
-					categories: [{name: 'Brazilian Buffet'}]
-				}
-			}
-		];
 		self.clearFourSquareMarkers();
 		self.createJeremyLocations(jeremyLocations);
 	};
@@ -131,7 +132,6 @@ var ViewModel = function () {
 		});
 	};
 	this.getFourSquare();
-
 	//partially based off of the discussion at https://discussions.udacity.com/t/p5-status-check-in/29104
 	this.createLocations = function (loc) {
 		for (var i = 0; i < loc.length; i++){
@@ -153,7 +153,11 @@ var ViewModel = function () {
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
 				var myLatLng = new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng());
-				var marker = new google.maps.Marker({position: myLatLng, map: map, clickable: true});
+				var marker = new google.maps.Marker({position: myLatLng,
+					map: map,
+					clickable: true,
+					animation: google.maps.Animation.DROP
+				});
 				self.mapLocations.push(fourSquareLocations);
 				fourSquareMarker.push(marker);
 				google.maps.event.addListener(marker, 'click', function() {
@@ -164,7 +168,7 @@ var ViewModel = function () {
 					}
 					setTimeout(function() {
 						marker.setAnimation(null);
-					}, 2000);
+					}, 1500);
 				}, false);
 			}(fourSquareLocations[i]));
 		}
@@ -188,13 +192,39 @@ var ViewModel = function () {
 			var category = venue.categories[0].name;
 			var object = {name: name, lat: location.lat, lng: location.lng, category: category};
 			self.mapLocations.push(new Place(object));
+			formattedJeremyLocations.push(new Place(object));
 		}
-		self.createJeremyMarker();
+		self.createJeremyMarker(map, formattedJeremyLocations);
 	};
 
 	var jeremyMarker = [];
-	this.createJeremyMarker = function() {
-		self.mapLocations().forEach(function (mapLocations) {
+	this.createJeremyMarker = function(map, jeremyLocations) {
+		for (var i = 0; i < jeremyLocations.length; i++) {
+			var loc = jeremyLocations[i].venue.location;
+			(function (loc) {
+				var myLatLng = new google.maps.LatLng(loc.lat(), loc.lng());
+				var marker = new google.maps.Marker({position: myLatLng,
+					map: map, clickable: true,
+					animation: google.maps.Animation.DROP,
+					icon: 'img/1458190296_location_3-03.svg'
+					//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
+				});
+				jeremyMarker.push(marker);
+				self.mapLocations.push(jeremyLocations);
+				google.maps.event.addListener(marker, 'click', function() {
+					if (marker.getAnimation() !== null) {
+						marker.setAnimation(null);
+					} else {
+						marker.setAnimation(google.maps.Animation.BOUNCE);
+					}
+					setTimeout(function() {
+						marker.setAnimation(null);
+					}, 1500);
+				}, false);
+			}(jeremyLocations[i]));
+		}
+
+		/*self.mapLocations().forEach(function (mapLocations) {
 			marker = new google.maps.Marker({
 				position: new google.maps.LatLng(mapLocations.lat(), mapLocations.lng()),
 				map: map,
@@ -204,7 +234,7 @@ var ViewModel = function () {
 			});
 			jeremyMarker.push(marker);
 			marker.addListener('click', self.toggleBounce);
-		})
+		})*/
 	};
 
 	this.toggleBounce = function(marker) {
