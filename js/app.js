@@ -1,5 +1,3 @@
-var infoWindow;
-
 var initMap = function () {
 	var mapOptions = {
 		disableDefaultUI: true,
@@ -205,8 +203,19 @@ var ViewModel = function () {
 					clickable: true,
 					animation: google.maps.Animation.DROP
 				});
+
+				var contentString = "<div id='info-content'>" +
+					"<h2>" + fourSquareLocations.venue + "</h2>" +
+					"<p>" + fourSquareLocations.category + "</p>" +
+					"</div>";
+
+				var infowindow = new google.maps.InfoWindow({
+					content: contentString
+				});
+
 				self.mapLocations.push(fourSquareLocations);
 				fourSquareMarker.push(marker);
+
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
 						marker.setAnimation(null);
@@ -217,6 +226,10 @@ var ViewModel = function () {
 						marker.setAnimation(null);
 					}, 1500);
 				}, false);
+
+				google.maps.event.addListener(marker, 'click', function() {
+					infowindow.open(map, marker);
+				});
 			}(fourSquareLocations[i]));
 		}
 		/*self.fourSquareLocations.forEach(function (fourSquareLocations) {
@@ -258,8 +271,17 @@ var ViewModel = function () {
 					icon: 'img/1458190296_location_3-03.svg'
 					//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
 				});
+
+				var contentString = "<div id='info-content'>" +
+					"<h2>" + jeremyLocations[i].venue + "</h2>" +
+					"<p>" + jeremyLocations[i].categories + "</p>" +
+					"</div>";
+
+				var infowindow = new google.maps.InfoWindow({
+					content: contentString
+				});
+
 				jeremyMarker.push(marker);
-				//self.mapLocations.push(jeremyLocations);
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
 						marker.setAnimation(null);
@@ -270,6 +292,10 @@ var ViewModel = function () {
 						marker.setAnimation(null);
 					}, 1500);
 				}, false);
+
+				google.maps.event.addListener(marker, 'click', function() {
+					infowindow.open(map, marker);
+				});
 			}(jeremyLocations[i]));
 		}
 
