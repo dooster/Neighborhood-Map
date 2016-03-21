@@ -25,7 +25,7 @@ var Place = function(object) {
 	this.lat = ko.observable(object.lat);
 	this.lng = ko.observable(object.lng);
 	this.address = ko.observable(object.address);
-	this.categories = ko.observable(object.categories);
+	this.category = ko.observable(object.category);
 };
 
 var ViewModel = function () {
@@ -205,8 +205,8 @@ var ViewModel = function () {
 				});
 
 				var contentString = "<div id='info-content'>" +
-					"<h2>" + fourSquareLocations.venue + "</h2>" +
-					"<p>" + fourSquareLocations.category + "</p>" +
+					"<h2>" + fourSquareLocations.venue() + "</h2>" +
+					"<p>" + fourSquareLocations.category() + "</p>" +
 					"</div>";
 
 				var infowindow = new google.maps.InfoWindow({
