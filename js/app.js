@@ -162,7 +162,7 @@ var ViewModel = function () {
 		$.ajax({
 			url: config.apiUrl + 'v2/venues/explore',
 			dataType: 'json',
-			data: 'll=40.7614547802915,-73.9200578197085&radius=2000&section=food&client_id=' +
+			data: 'll=40.7614547802915,-73.9200578197085&radius=5000&section=food&client_id=' +
 				config.clientId +
 				'&client_secret=' +
 				config.clientSecret +
@@ -187,7 +187,6 @@ var ViewModel = function () {
 			var location = venue.location;
 			var category = venue.categories[0].name;
 			var object = {name: name, lat: location.lat, lng: location.lng, category: category};
-			self.mapLocations.push(new Place(object));
 			fourSquareLocations.push(new Place(object));
 			console.log(fourSquareLocations);
 		}
@@ -324,13 +323,12 @@ function googleError () {
 };
 
 /*Todo
--settimeout drop google markers
+-create infoWindows
 -add local storage
 -create search functionality
 -add extra features to search such as autocomplete
 -create click event on search results that directs to pin
 -change pin icon when selected
--create infoWindows
 -implement and link another API
 -make website responsive across all devices
 -create a Gulp workflow
@@ -339,6 +337,7 @@ function googleError () {
 
 -add 4square attribution https://developer.foursquare.com/overview/attribution
 -add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
+-settimeout drop google markers
 
 -add Jeremy vs Jen locations
 */
