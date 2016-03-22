@@ -203,6 +203,7 @@ var ViewModel = function () {
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	var fourSquareMarker = [];
+	var infowindow;
 	this.createMarker = function(map, fourSquareLocations) {
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
@@ -221,9 +222,7 @@ var ViewModel = function () {
 					"<p>" + "<b>FourSquare Rating: </b>" + fourSquareLocations.rating() + " out of 10" + "</p>" +
 					"</div>";
 
-				var infowindow = new google.maps.InfoWindow({
-					content: contentString
-				});
+				//var infowindow;
 
 				self.mapLocations.push(fourSquareLocations);
 				fourSquareMarker.push(marker);
@@ -236,12 +235,21 @@ var ViewModel = function () {
 					}
 					setTimeout(function() {
 						marker.setAnimation(null);
-					}, 1500);
+					}, 1200);
 				}, false);
 
 				google.maps.event.addListener(marker, 'click', function() {
+					if (infowindow) infowindow.close();
+					infowindow = new google.maps.InfoWindow({
+						content: contentString
+					});
 					infowindow.open(map, marker);
 				});
+
+				google.maps.event.addListener(map, 'click', function() {
+					infowindow.close();
+				});
+
 			}(fourSquareLocations[i]));
 		}
 		/*self.fourSquareLocations.forEach(function (fourSquareLocations) {
@@ -254,6 +262,10 @@ var ViewModel = function () {
 			fourSquareMarker.push(marker);
 			marker.addListener('click', self.toggleBounce);
 		})*/
+	};
+
+	this.openInfoWindow = function (map, marker, infowindow) {
+		infowindow.open(map, marker);
 	};
 
 	/*this.createJeremyLocations = function (loc) {
@@ -289,10 +301,6 @@ var ViewModel = function () {
 					"<p>" + jeremyLocations[i].categories + "</p>" +
 					"</div>";
 
-				var infowindow = new google.maps.InfoWindow({
-					content: contentString
-				});
-
 				jeremyMarker.push(marker);
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
@@ -306,7 +314,15 @@ var ViewModel = function () {
 				}, false);
 
 				google.maps.event.addListener(marker, 'click', function() {
+					if (infowindow) infowindow.close();
+					infowindow = new google.maps.InfoWindow({
+						content: contentString
+					});
 					infowindow.open(map, marker);
+				});
+
+				google.maps.event.addListener(map, 'click', function() {
+					infowindow.close();
 				});
 			}(jeremyLocations[i]));
 		}
@@ -361,7 +377,6 @@ function googleError () {
 };
 
 /*Todo
--create infoWindows
 -add local storage
 -create search functionality
 -add extra features to search such as autocomplete
