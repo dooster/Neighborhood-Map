@@ -20,7 +20,7 @@
 				<div class="search">
 					<input placeholder="Search ..." type="search">
 					<div id="location-list" data-bind="foreach: mapLocations">
-						<ul data-bind="text: $data.venue">
+						<ul data-bind="text: $data.venue, click: $parent.openInfoWindow">
 					</div>
 				</div>
 			</div>

@@ -80,7 +80,7 @@ var ViewModel = function () {
 			}
 		}
 	];*/
-	var formattedJeremyLocations = [
+	var jeremyLocations = [
 		{
 			venue: 'SingleCut Beersmiths',
 			lat : 40.7783129,
@@ -142,7 +142,7 @@ var ViewModel = function () {
 		self.mapLocations.removeAll();
 		self.clearFourSquareMarkers();
 		//self.createJeremyLocations(jeremyLocations);
-		self.createJeremyMarker(map, formattedJeremyLocations);
+		self.createJeremyMarker(jeremyLocations);
 	};
 
 	this.displayMyLoc = function() {
@@ -198,13 +198,13 @@ var ViewModel = function () {
 			fourSquareLocations.push(new Place(object));
 			console.log(fourSquareLocations);
 		}
-		self.createMarker(map, fourSquareLocations);
+		self.createMarker(fourSquareLocations);
 	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	var fourSquareMarker = [];
-	var infowindow;
-	this.createMarker = function(map, fourSquareLocations) {
+	var infowindow, location;
+	this.createMarker = function(fourSquareLocations) {
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
 				var myLatLng = new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng());
@@ -215,14 +215,14 @@ var ViewModel = function () {
 					animation: google.maps.Animation.DROP
 				});
 
+				fourSquareLocations.loc = location;
+
 				var contentString = "<div id='info-content'>" +
 					"<h2>" + fourSquareLocations.venue() + "</h2>" +
 					"<p>" + fourSquareLocations.category() + "</p>" +
 					"<p>" + fourSquareLocations.address() + ", " + fourSquareLocations.city() + "</p>" +
 					"<p>" + "<b>FourSquare Rating: </b>" + fourSquareLocations.rating() + " out of 10" + "</p>" +
 					"</div>";
-
-				//var infowindow;
 
 				self.mapLocations.push(fourSquareLocations);
 				fourSquareMarker.push(marker);
@@ -247,7 +247,7 @@ var ViewModel = function () {
 				});
 
 				google.maps.event.addListener(map, 'click', function() {
-					infowindow.close();
+					if (infowindow) infowindow.close();
 				});
 
 			}(fourSquareLocations[i]));
@@ -264,8 +264,8 @@ var ViewModel = function () {
 		})*/
 	};
 
-	this.openInfoWindow = function (map, marker, infowindow) {
-		infowindow.open(map, marker);
+	this.openInfoWindow = function (marker) {
+		google.maps.event.trigger(marker.loc, 'click');
 	};
 
 	/*this.createJeremyLocations = function (loc) {
@@ -282,7 +282,7 @@ var ViewModel = function () {
 	};*/
 
 	var jeremyMarker = [];
-	this.createJeremyMarker = function(map, jeremyLocations) {
+	this.createJeremyMarker = function(jeremyLocations) {
 		for (var i = 0; i < jeremyLocations.length; i++) {
 			var loc = jeremyLocations[i];
 			self.mapLocations.push(loc);
@@ -290,7 +290,8 @@ var ViewModel = function () {
 				var myLatLng = new google.maps.LatLng(loc.lat, loc.lng);
 				var marker = new google.maps.Marker({
 					position: myLatLng,
-					map: map, clickable: true,
+					map: map,
+					clickable: true,
 					animation: google.maps.Animation.DROP,
 					icon: 'img/1458190296_location_3-03.svg'
 					//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
@@ -322,7 +323,7 @@ var ViewModel = function () {
 				});
 
 				google.maps.event.addListener(map, 'click', function() {
-					infowindow.close();
+					if (infowindow) infowindow.close();
 				});
 			}(jeremyLocations[i]));
 		}
