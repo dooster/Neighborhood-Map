@@ -211,12 +211,13 @@ var ViewModel = function () {
 
 				fourSquareLocations.marker = marker;
 
-				self.openInfoWindow(fourSquareLocations);
+				//self.openInfoWindow(fourSquareLocations);
 
 			}(fourSquareLocations[i]));
 		}
 	};
 
+	//infinite gratitude to https://github.com/kacymckibben/project-5-app/blob/master/js/app.js for this
 	this.openInfoWindow = function (loc) {
 		google.maps.event.trigger(loc.marker, 'click');
 	};
@@ -268,7 +269,7 @@ var ViewModel = function () {
 				});
 
 				loc.marker = marker;
-				self.openInfoWindow(loc);
+				//self.openInfoWindow(loc);
 
 			}(jeremyLocations[i]));
 		}
