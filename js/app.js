@@ -32,100 +32,62 @@ var Place = function(object) {
 
 var ViewModel = function () {
 	var self=this;
-	/*var jeremyLocations = [
-		{ venue: {
-				name: 'SingleCut Beersmiths',
-				location: {address: '19-33 37th St, New York, NY 11105', lat : 40.7783129, lng : -73.9017037},
-				categories: [{name: 'Brewery Bar'}]
-			}
-		}, { venue: {
-				name: "Doyle's Corner",
-				location: {address: '4202 Broadway, Astoria, NY 11103', lat : 40.7580005, lng : -73.91735629999999},
-				categories: [{name: 'Bar and Grill'}]
-			}
-		}, { venue: {
-				name: 'Yaar Indian Restaurant',
-				location: {address: '22-55 31st St, New York, 11105', lat : 40.774797, lng : -73.911866},
-				categories: [{name: 'Indian Restaurant'}]
-			}
-		}, { venue: {
-				name: 'Bai Sushi',
-				location: {address: '37-03 Broadway, Astoria, NY 11103', lat : 40.7597557, lng : -73.92021869999999},
-				categories: [{name: 'Sushi Restaurant'}]
-			}
-		}, { venue: {
-				name: 'New York City Bagel & Coffee House',
-				location: {address: '40-05 Broadway, Queens, NY 11103', lat : 40.7589623, lng : -73.9185095},
-				categories: [{name: 'Coffee and Bagel Shop'}]
-			}
-		}, { venue: {
-				name: 'Pye Boat Noodle',
-				location: {address: '35-13 Broadway, New York, NY 11106', lat : 40.7604336, lng : -73.92156799999999},
-				categories: [{name: 'Thai Restaurant'}]
-			}
-		}, { venue: {
-				name: 'Cafe Boulis',
-				location: {address: '31-15 31st Ave, Astoria, NY 11102', lat : 40.7646088, lng : -73.92354440000001},
-				categories: [{name: 'Greek Bakery'}]
-			}
-		}, { venue: {
-				name: 'Bear',
-				location: {address: '12-14 31st Ave, Astoria, NY 11106', lat : 40.768372, lng : -73.93303},
-				categories: [{name: 'Russian Restaurant'}]
-			}
-		}, { venue: {
-				name: 'Villa Brazil',
-				location: {address: '43-16 34th Ave, Long Island City, NY 11101', lat : 40.7551288, lng : -73.9180253},
-				categories: [{name: 'Brazilian Buffet'}]
-			}
-		}
-	];*/
+
 	var jeremyLocations = [
 		{
 			venue: 'SingleCut Beersmiths',
 			lat : 40.7783129,
 			lng : -73.9017037,
-			categories:'Brewery Bar'
+			categories:'Brewery Bar',
+			address: '19-33 37th St, Astoria'
 		}, {
 			venue: "Doyle's Corner",
 			lat : 40.7580005,
 			lng : -73.91735629999999,
-			categories: 'Bar and Grill'
+			categories: 'Bar and Grill',
+			address: '4202 Broadway, Astoria'
 		}, {
 			venue: 'Yaar Indian Restaurant',
 			lat : 40.774797,
 			lng : -73.911866,
-			categories: 'Indian Restaurant'
+			categories: 'Indian Restaurant',
+			address: '22-55 31st St, Astoria'
 		}, {
 			venue: 'Bai Sushi',
 			lat : 40.7597557,
 			lng : -73.92021869999999,
-			categories: 'Sushi Restaurant'
+			categories: 'Sushi Restaurant',
+			address: '37-03 Broadway, Astoria'
 		}, {
 			venue: 'New York City Bagel & Coffee House',
 			lat : 40.7589623,
 			lng : -73.9185095,
-			categories:'Coffee and Bagel Shop'
+			categories:'Coffee and Bagel Shop',
+			address: '40-05 Broadway, Astoria'
 		}, {
 			venue: 'Pye Boat Noodle',
 			lat : 40.7604336,
 			lng : -73.92156799999999,
-			categories: 'Thai Restaurant'
+			categories: 'Thai Restaurant',
+			address: '35-13 Broadway, Astoria'
 		}, {
 			venue: 'Cafe Boulis',
 			lat : 40.7646088,
 			lng : -73.92354440000001,
-			categories: 'Greek Bakery'
+			categories: 'Greek Bakery',
+			address: '31-15 31st Ave, Astoria'
 		}, {
 			venue: 'Bear',
 			lat : 40.768372,
 			lng : -73.93303,
-			categories: 'Russian Restaurant'
+			categories: 'Russian Restaurant',
+			address: '12-14 31st Ave, Long Island City'
 		}, {
 			venue: 'Villa Brazil',
 			lat : 40.7551288,
 			lng : -73.9180253,
-			categories:'Brazilian Buffet'
+			categories:'Brazilian Buffet',
+			address: '43-16 34th Ave, Long Island City'
 		}];
 	var fourSquareLocations = [];
 
@@ -135,13 +97,12 @@ var ViewModel = function () {
 	this.displayResults = function() {
 		self.mapLocations.removeAll();
 		self.clearJeremyMarkers();
-		this.createMarker(map, fourSquareLocations);
+		this.createMarker(fourSquareLocations);
 	};
 
 	this.displayJerLoc = function() {
 		self.mapLocations.removeAll();
 		self.clearFourSquareMarkers();
-		//self.createJeremyLocations(jeremyLocations);
 		self.createJeremyMarker(jeremyLocations);
 	};
 
@@ -203,7 +164,7 @@ var ViewModel = function () {
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	var fourSquareMarker = [];
-	var infowindow, location;
+	var infowindow;
 	this.createMarker = function(fourSquareLocations) {
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
@@ -214,8 +175,6 @@ var ViewModel = function () {
 					clickable: true,
 					animation: google.maps.Animation.DROP
 				});
-
-				fourSquareLocations.loc = location;
 
 				var contentString = "<div id='info-content'>" +
 					"<h2>" + fourSquareLocations.venue() + "</h2>" +
@@ -252,34 +211,11 @@ var ViewModel = function () {
 
 			}(fourSquareLocations[i]));
 		}
-		/*self.fourSquareLocations.forEach(function (fourSquareLocations) {
-			self.mapLocations.push(fourSquareLocations);
-			marker = new google.maps.Marker({
-				position: new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng()),
-				map: map,
-				animation: google.maps.Animation.DROP
-			});
-			fourSquareMarker.push(marker);
-			marker.addListener('click', self.toggleBounce);
-		})*/
 	};
 
 	this.openInfoWindow = function (marker) {
 		google.maps.event.trigger(marker.loc, 'click');
 	};
-
-	/*this.createJeremyLocations = function (loc) {
-		for (var i = 0; i < loc.length; i++){
-			var venue = loc[i].venue;
-			var name = venue.name;
-			var location = venue.location;
-			var category = venue.categories[0].name;
-			var object = {name: name, lat: location.lat, lng: location.lng, category: category};
-			self.mapLocations.push(new Place(object));
-			formattedJeremyLocations.push(new Place(object));
-		}
-		self.createJeremyMarker(map, formattedJeremyLocations);
-	};*/
 
 	var jeremyMarker = [];
 	this.createJeremyMarker = function(jeremyLocations) {
@@ -300,6 +236,7 @@ var ViewModel = function () {
 				var contentString = "<div id='info-content'>" +
 					"<h2>" + jeremyLocations[i].venue + "</h2>" +
 					"<p>" + jeremyLocations[i].categories + "</p>" +
+					"<p>" + jeremyLocations[i].address + "</p>" +
 					"</div>";
 
 				jeremyMarker.push(marker);
@@ -327,30 +264,7 @@ var ViewModel = function () {
 				});
 			}(jeremyLocations[i]));
 		}
-
-		/*self.mapLocations().forEach(function (mapLocations) {
-			marker = new google.maps.Marker({
-				position: new google.maps.LatLng(mapLocations.lat(), mapLocations.lng()),
-				map: map,
-				animation: google.maps.Animation.DROP,
-				icon: 'img/1458190296_location_3-03.svg'
-				//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
-			});
-			jeremyMarker.push(marker);
-			marker.addListener('click', self.toggleBounce);
-		})*/
 	};
-
-	/*this.toggleBounce = function(marker) {
-		if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-		} else {
-			marker.setAnimation(google.maps.Animation.BOUNCE);
-		}
-		setTimeout(function() {
-			marker.setAnimation(null);
-		}, 1500);
-	};*/
 
 	this.setFourSquareMap = function(map) {
 		for (var i = 0; i < fourSquareMarker.length; i++) {
