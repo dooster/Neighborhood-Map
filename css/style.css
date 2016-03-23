@@ -7,23 +7,34 @@ html, body {
 
 #map-container{
 	max-width: 100%;
-	justify-content: flex-start;
+	max-height: 100%;
+	/*justify-content: flex-start;*/
 }
 
 #map {
-	height: 610px;
-	width: 83%;
+	height: 90vh;
+	max-width: 100%;
 	margin: 0;
 	padding: 0;
+}
+
+#search-box {
+	opacity: 1;
 }
 
 #nav-bar {
+	position: absolute;
 	width: 15%;
 	margin: 0;
 	padding: 0;
+	overflow: scroll;
+	max-height: 75vh;
+	z-index: 1;
+	background: white;
+	opacity: 0.83;
 }
 
-#header, #map-container {
+#header/*, #map-container*/ {
 	display:flex;
 	flex-direction: row;
 	flex-wrap: wrap;
