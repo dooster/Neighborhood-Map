@@ -18,9 +18,11 @@
 		<div id="map-container">
 			<div id="nav-bar">
 				<div class="search">
-					<input placeholder="Filter ..." type="search">
+					<input type="search" placeholder="Filter ..." data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off" />
 					<div id="location-list" data-bind="foreach: mapLocations">
-						<ul data-bind="text: $data.venue, click: $parent.openInfoWindow">
+						<ul>
+							<strong data-bind="text: $data.venue, click: $parent.openInfoWindow"></strong>
+						</ul>
 					</div>
 				</div>
 			</div>

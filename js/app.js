@@ -294,6 +294,10 @@ var ViewModel = function () {
 	this.clearJeremyMarkers = function () {
 		self.setJeremyMap(null);
 	};
+
+	this.query = function () {
+		console.log(mapLocations);
+	};
 };
 
 function googleError () {
