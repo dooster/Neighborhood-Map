@@ -166,6 +166,7 @@ var ViewModel = function () {
 	var fourSquareMarker = [];
 	var infowindow, location;
 	this.createMarker = function(fourSquareLocations) {
+		self.clearFourSquareMarkers();
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
 				var myLatLng = new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng());
@@ -224,6 +225,7 @@ var ViewModel = function () {
 
 	var jeremyMarker = [];
 	this.createJeremyMarker = function(jeremyLocations) {
+		self.clearJeremyMarkers();
 		for (var i = 0; i < jeremyLocations.length; i++) {
 			var loc = jeremyLocations[i];
 			self.mapLocations.push(loc);
@@ -295,9 +297,16 @@ var ViewModel = function () {
 		self.setJeremyMap(null);
 	};
 
-	this.query = function () {
-		console.log(mapLocations);
-	};
+	this.search = function (value) {
+		self.mapLocations.removeAll();
+		self.clearJeremyMarkers();
+		self.clearFourSquareMarkers();
+
+
+	}
+
+	/*var query;
+	query.subscribe(search);*/
 };
 
 function googleError () {
