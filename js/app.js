@@ -28,6 +28,7 @@ var Place = function(object) {
 	this.city = ko.observable(object.city);
 	this.category = ko.observable(object.category);
 	this.rating = ko.observable(object.rating);
+	this.id = ko.observable(object.id);
 };
 
 var ViewModel = function () {
@@ -149,13 +150,15 @@ var ViewModel = function () {
 			var location = venue.location;
 			var category = venue.categories[0].name;
 			var rating = venue.rating;
+			var id = venue.id;
 			var object = {name: name,
 				address: location.address,
 				city: location.city,
 				lat: location.lat,
 				lng: location.lng,
 				category: category,
-				rating: rating};
+				rating: rating,
+				id: id};
 			fourSquareLocations.push(new Place(object));
 			console.log(fourSquareLocations);
 		}
@@ -176,9 +179,9 @@ var ViewModel = function () {
 					clickable: true,
 					animation: google.maps.Animation.DROP
 				});
-
+				var attributionURL = 'https://foursquare.com/v/';
 				var contentString = "<div id='info-content'>" +
-					"<strong>" + fourSquareLocations.venue() + "</strong>" +
+					"<strong>" + "<a href ='" + attributionURL + fourSquareLocations.id() + "'>" + fourSquareLocations.venue() + "</a></strong>" +
 					"<br>" + fourSquareLocations.category() + "<br>" +
 					fourSquareLocations.address() + ", " + fourSquareLocations.city() + "<br>" +
 					"<b>FourSquare Rating: </b>" + fourSquareLocations.rating() + " out of 10" +
@@ -302,7 +305,9 @@ var ViewModel = function () {
 		self.clearJeremyMarkers();
 		self.clearFourSquareMarkers();
 
+		for (var x in self.mapLocations) {
 
+		}
 	}
 
 	/*var query;
@@ -314,10 +319,10 @@ function googleError () {
 };
 
 /*Todo
--add local storage
 -create search functionality
 -add extra features to search such as autocomplete
--create click event on search results that directs to pin
+-add local storage
+-show user's location
 -change pin icon when selected
 -implement and link another API
 -make website responsive across all devices
@@ -325,7 +330,7 @@ function googleError () {
 -app features thorough comments
 -create a README
 
--add 4square attribution https://developer.foursquare.com/overview/attribution
+-add see location on googlemaps
 -add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
 -settimeout drop google markers
 
