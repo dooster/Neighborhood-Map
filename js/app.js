@@ -178,10 +178,10 @@ var ViewModel = function () {
 				});
 
 				var contentString = "<div id='info-content'>" +
-					"<h2>" + fourSquareLocations.venue() + "</h2>" +
-					"<p>" + fourSquareLocations.category() + "</p>" +
-					"<p>" + fourSquareLocations.address() + ", " + fourSquareLocations.city() + "</p>" +
-					"<p>" + "<b>FourSquare Rating: </b>" + fourSquareLocations.rating() + " out of 10" + "</p>" +
+					"<strong>" + fourSquareLocations.venue() + "</strong>" +
+					"<br>" + fourSquareLocations.category() + "<br>" +
+					fourSquareLocations.address() + ", " + fourSquareLocations.city() + "<br>" +
+					"<b>FourSquare Rating: </b>" + fourSquareLocations.rating() + " out of 10" +
 					"</div>";
 
 				self.mapLocations.push(fourSquareLocations);
@@ -241,9 +241,9 @@ var ViewModel = function () {
 				});
 
 				var contentString = "<div id='info-content'>" +
-					"<h2>" + jeremyLocations[i].venue + "</h2>" +
-					"<p>" + jeremyLocations[i].categories + "</p>" +
-					"<p>" + jeremyLocations[i].address + "</p>" +
+					"<strong>" + jeremyLocations[i].venue + "</strong>" +
+					"<br>" + jeremyLocations[i].categories + "<br>" +
+					jeremyLocations[i].address +
 					"</div>";
 
 				jeremyMarker.push(marker);
