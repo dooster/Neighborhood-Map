@@ -39,55 +39,55 @@ var ViewModel = function () {
 			venue: 'SingleCut Beersmiths',
 			lat : 40.7783129,
 			lng : -73.9017037,
-			categories:'Brewery Bar',
+			category:'Brewery Bar',
 			address: '19-33 37th St, Astoria'
 		}, {
 			venue: "Doyle's Corner",
 			lat : 40.7580005,
 			lng : -73.91735629999999,
-			categories: 'Bar and Grill',
+			category: 'Bar and Grill',
 			address: '4202 Broadway, Astoria'
 		}, {
 			venue: 'Yaar Indian Restaurant',
 			lat : 40.774797,
 			lng : -73.911866,
-			categories: 'Indian Restaurant',
+			category: 'Indian Restaurant',
 			address: '22-55 31st St, Astoria'
 		}, {
 			venue: 'Bai Sushi',
 			lat : 40.7597557,
 			lng : -73.92021869999999,
-			categories: 'Sushi Restaurant',
+			category: 'Sushi Restaurant',
 			address: '37-03 Broadway, Astoria'
 		}, {
 			venue: 'New York City Bagel & Coffee House',
 			lat : 40.7589623,
 			lng : -73.9185095,
-			categories:'Coffee and Bagel Shop',
+			category:'Coffee and Bagel Shop',
 			address: '40-05 Broadway, Astoria'
 		}, {
 			venue: 'Pye Boat Noodle',
 			lat : 40.7604336,
 			lng : -73.92156799999999,
-			categories: 'Thai Restaurant',
+			category: 'Thai Restaurant',
 			address: '35-13 Broadway, Astoria'
 		}, {
 			venue: 'Cafe Boulis',
 			lat : 40.7646088,
 			lng : -73.92354440000001,
-			categories: 'Greek Bakery',
+			category: 'Greek Bakery',
 			address: '31-15 31st Ave, Astoria'
 		}, {
 			venue: 'Bear',
 			lat : 40.768372,
 			lng : -73.93303,
-			categories: 'Russian Restaurant',
+			category: 'Russian Restaurant',
 			address: '12-14 31st Ave, Long Island City'
 		}, {
 			venue: 'Villa Brazil',
 			lat : 40.7551288,
 			lng : -73.9180253,
-			categories:'Brazilian Buffet',
+			category:'Brazilian Buffet',
 			address: '43-16 34th Ave, Long Island City'
 		}];
 	var fourSquareLocations = [];
@@ -97,13 +97,13 @@ var ViewModel = function () {
 
 	this.displayResults = function() {
 		self.mapLocations.removeAll();
-		self.clearJeremyMarkers();
+		self.clearMarkers();
 		this.createMarker(fourSquareLocations);
 	};
 
 	this.displayJerLoc = function() {
 		self.mapLocations.removeAll();
-		self.clearFourSquareMarkers();
+		self.clearMarkers();
 		self.createJeremyMarker(jeremyLocations);
 	};
 
@@ -132,7 +132,7 @@ var ViewModel = function () {
 			async: true,
 			success: function(data) {
 				venue = data.response.groups[0].items;
-				self.clearJeremyMarkers();
+				self.clearMarkers();
 				self.createLocations(venue);
 			},
 			error: function(e) {
@@ -166,10 +166,12 @@ var ViewModel = function () {
 	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
-	var fourSquareMarker = [];
+	var markerArray = [];
+
 	var infowindow, location;
+
 	this.createMarker = function(fourSquareLocations) {
-		self.clearFourSquareMarkers();
+		self.clearMarkers();
 		for (var i = 0; i < fourSquareLocations.length; i++) {
 			(function (fourSquareLocations) {
 				var myLatLng = new google.maps.LatLng(fourSquareLocations.lat(), fourSquareLocations.lng());
@@ -188,7 +190,7 @@ var ViewModel = function () {
 					"</div>";
 
 				self.mapLocations.push(fourSquareLocations);
-				fourSquareMarker.push(marker);
+				markerArray.push(marker);
 
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
@@ -215,8 +217,6 @@ var ViewModel = function () {
 
 				fourSquareLocations.marker = marker;
 
-				//self.openInfoWindow(fourSquareLocations);
-
 			}(fourSquareLocations[i]));
 		}
 	};
@@ -226,9 +226,8 @@ var ViewModel = function () {
 		google.maps.event.trigger(loc.marker, 'click');
 	};
 
-	var jeremyMarker = [];
 	this.createJeremyMarker = function(jeremyLocations) {
-		self.clearJeremyMarkers();
+		self.clearMarkers();
 		for (var i = 0; i < jeremyLocations.length; i++) {
 			var loc = jeremyLocations[i];
 			self.mapLocations.push(loc);
@@ -245,11 +244,11 @@ var ViewModel = function () {
 
 				var contentString = "<div id='info-content'>" +
 					"<strong>" + jeremyLocations[i].venue + "</strong>" +
-					"<br>" + jeremyLocations[i].categories + "<br>" +
+					"<br>" + jeremyLocations[i].category + "<br>" +
 					jeremyLocations[i].address +
 					"</div>";
 
-				jeremyMarker.push(marker);
+				markerArray.push(marker);
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
 						marker.setAnimation(null);
@@ -274,41 +273,39 @@ var ViewModel = function () {
 				});
 
 				loc.marker = marker;
-				//self.openInfoWindow(loc);
 
 			}(jeremyLocations[i]));
 		}
 	};
 
-	this.setFourSquareMap = function(map) {
-		for (var i = 0; i < fourSquareMarker.length; i++) {
-			fourSquareMarker[i].setMap(map);
+	this.setMarkerMap = function(map) {
+		for (var i = 0; i < markerArray.length; i++) {
+			markerArray[i].setMap(map);
 		}
 	};
 
-	this.clearFourSquareMarkers = function () {
-		self.setFourSquareMap(null);
+	this.clearMarkers = function(map) {
+		self.setMarkerMap(null);
+		markerArray = [];
 	};
 
-	this.setJeremyMap = function(map) {
-		for (var i = 0; i < jeremyMarker.length; i++) {
-			jeremyMarker[i].setMap(map);
-		}
-	};
-
-	this.clearJeremyMarkers = function () {
-		self.setJeremyMap(null);
-	};
+	this.filter = ko.observable('');
 
 	this.search = function (value) {
-		self.mapLocations.removeAll();
-		self.clearJeremyMarkers();
-		self.clearFourSquareMarkers();
+		self.clearMarkers();
 
-		for (var x in self.mapLocations) {
+		var enteredFilter = this.filter().toLowerCase();
 
-		}
-	}
+		self.mapLocations().forEach(function (mapLocations) {
+			self.mapLocations.removeAll();
+			if (mapLocations.name().toLowerCase().indexOf(enteredFilter) !== -1) {
+				self.mapLocations.push(item);
+			} else
+			{
+				self.mapLocations.removeAll();
+			}
+		});
+	};
 
 	/*var query;
 	query.subscribe(search);*/
