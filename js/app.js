@@ -37,58 +37,76 @@ var ViewModel = function () {
 	var jeremyLocations = [
 		{
 			venue: 'SingleCut Beersmiths',
+			website: 'http://www.singlecutbeer.com/',
 			lat : 40.7783129,
 			lng : -73.9017037,
 			category:'Brewery Bar',
-			address: '19-33 37th St, Astoria'
+			address: '19-33 37th St, Astoria',
+			rating: 9.4
 		}, {
 			venue: "Doyle's Corner",
+			website: "https://foursquare.com/v/doyles-corner/4b42d0b4f964a52022da25e3",
 			lat : 40.7580005,
 			lng : -73.91735629999999,
 			category: 'Bar and Grill',
-			address: '4202 Broadway, Astoria'
+			address: '4202 Broadway, Astoria',
+			rating: 8.1
 		}, {
 			venue: 'Yaar Indian Restaurant',
+			website: "http://www.yaarindianrestaurant.net/",
 			lat : 40.774797,
 			lng : -73.911866,
 			category: 'Indian Restaurant',
-			address: '22-55 31st St, Astoria'
+			address: '22-55 31st St, Astoria',
+			rating: 8.4
 		}, {
 			venue: 'Bai Sushi',
+			website: 'https://foursquare.com/v/bai-sushi/4b2062f2f964a520a53124e3',
 			lat : 40.7597557,
 			lng : -73.92021869999999,
 			category: 'Sushi Restaurant',
-			address: '37-03 Broadway, Astoria'
+			address: '37-03 Broadway, Astoria',
+			rating: 7.9
 		}, {
 			venue: 'New York City Bagel & Coffee House',
+			website: "http://nycbch.com/",
 			lat : 40.7589623,
 			lng : -73.9185095,
 			category:'Coffee and Bagel Shop',
-			address: '40-05 Broadway, Astoria'
+			address: '40-05 Broadway, Astoria',
+			rating: 8.7
 		}, {
 			venue: 'Pye Boat Noodle',
+			website: 'http://www.pyeboatnoodle.com/',
 			lat : 40.7604336,
 			lng : -73.92156799999999,
 			category: 'Thai Restaurant',
-			address: '35-13 Broadway, Astoria'
+			address: '35-13 Broadway, Astoria',
+			rating: 9.0
 		}, {
 			venue: 'Cafe Boulis',
+			website: 'http://www.cafeboulis.com/',
 			lat : 40.7646088,
 			lng : -73.92354440000001,
 			category: 'Greek Bakery',
-			address: '31-15 31st Ave, Astoria'
+			address: '31-15 31st Ave, Astoria',
+			rating: 8.4
 		}, {
 			venue: 'Bear',
+			website: 'https://foursquare.com/v/bear/4eb00b6ef9f463d3c3c7880c',
 			lat : 40.768372,
 			lng : -73.93303,
 			category: 'Russian Restaurant',
-			address: '12-14 31st Ave, Long Island City'
+			address: '12-14 31st Ave, Long Island City',
+			rating: 8.5
 		}, {
 			venue: 'Villa Brazil',
+			website: 'http://villabrasilcafe.com/',
 			lat : 40.7551288,
 			lng : -73.9180253,
 			category:'Brazilian Buffet',
-			address: '43-16 34th Ave, Long Island City'
+			address: '43-16 34th Ave, Long Island City',
+			rating: 9.0
 		}];
 	var fourSquareLocations = [];
 
@@ -166,7 +184,7 @@ var ViewModel = function () {
 	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
-	var markerArray = [];
+	this.markerArray = ko.observableArray([]);
 
 	var infowindow, location;
 
@@ -183,14 +201,14 @@ var ViewModel = function () {
 				});
 				var attributionURL = 'https://foursquare.com/v/';
 				var contentString = "<div id='info-content'>" +
-					"<strong>" + "<a href ='" + attributionURL + fourSquareLocations.id() + "'>" + fourSquareLocations.venue() + "</a></strong>" +
+					"<strong> <a href ='" + attributionURL + fourSquareLocations.id() + "'>" + fourSquareLocations.venue() + "</a></strong>" +
 					"<br>" + fourSquareLocations.category() + "<br>" +
 					fourSquareLocations.address() + ", " + fourSquareLocations.city() + "<br>" +
 					"<b>FourSquare Rating: </b>" + fourSquareLocations.rating() + " out of 10" +
 					"</div>";
 
 				self.mapLocations.push(fourSquareLocations);
-				markerArray.push(marker);
+				self.markerArray.push(marker);
 
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
@@ -243,12 +261,13 @@ var ViewModel = function () {
 				});
 
 				var contentString = "<div id='info-content'>" +
-					"<strong>" + jeremyLocations[i].venue + "</strong>" +
+					"<strong> <a href ='" + jeremyLocations[i].website + "'>" + jeremyLocations[i].venue + "</a></strong>" +
 					"<br>" + jeremyLocations[i].category + "<br>" +
 					jeremyLocations[i].address +
+					"<br> <b>FourSquare Rating: </b>" + jeremyLocations[i].rating + " out of 10" +
 					"</div>";
 
-				markerArray.push(marker);
+				self.markerArray.push(marker);
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
 						marker.setAnimation(null);
@@ -279,14 +298,14 @@ var ViewModel = function () {
 	};
 
 	this.setMarkerMap = function(map) {
-		for (var i = 0; i < markerArray.length; i++) {
-			markerArray[i].setMap(map);
+		for (var i = 0; i < self.markerArray.length; i++) {
+			self.markerArray[i].setMap(map);
 		}
 	};
 
 	this.clearMarkers = function(map) {
 		self.setMarkerMap(null);
-		markerArray = [];
+		self.markerArray = [];
 	};
 
 	this.filter = ko.observable('');
@@ -294,11 +313,11 @@ var ViewModel = function () {
 	this.search = function (value) {
 		self.clearMarkers();
 
-		var enteredFilter = this.filter().toLowerCase();
+		var filterInput = this.filter().toLowerCase();
 
 		self.mapLocations().forEach(function (mapLocations) {
-			self.mapLocations.removeAll();
-			if (mapLocations.name().toLowerCase().indexOf(enteredFilter) !== -1) {
+			self.clearMarkers();
+			if (mapLocations.name().toLowerCase().indexOf(filterInput) !== -1) {
 				self.mapLocations.push(item);
 			} else
 			{
