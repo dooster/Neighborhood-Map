@@ -2,39 +2,58 @@ html, body {
 	height: 100%;
 	width: 100%;
 	margin: 0;
-	padding-left: 10px;
+	font-family: 'Raleway', sans-serif;
+	background-color: #FFDAB9;
 }
 
 #map-container{
 	max-width: 100%;
-	justify-content: flex-start;
+	max-height: 100%;
+	/*justify-content: flex-start;*/
 }
 
 #map {
-	height: 610px;
-	width: 83%;
+	height: 90vh;
+	max-width: 100%;
 	margin: 0;
 	padding: 0;
+}
+
+#search-box {
+	opacity: 1;
 }
 
 #nav-bar {
+	position: absolute;
 	width: 15%;
 	margin: 0;
 	padding: 0;
+	overflow: scroll;
+	max-height: 75vh;
+	z-index: 1;
+	background: white;
+	opacity: 0.83;
 }
 
-#header, #map-container {
+/* scrollbar appearance thanks to: http://stackoverflow.com/questions/7492062/css-overflow-scroll-always-show-vertical-scroll-bar */
+::-webkit-scrollbar {
+	-webkit-appearance: none;
+	width: 4px;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 4px;
+	background-color: rgba(0,0,0,.5);
+	-webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+#header{
 	display:flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	align-content: flex-start;
 	align-items: flex-start;
-}
-
-#header {
 	justify-content: space-around;
 }
-
 
 .hed-butt {
 	margin-top: 25px;
