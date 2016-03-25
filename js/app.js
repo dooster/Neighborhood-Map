@@ -108,6 +108,7 @@ var ViewModel = function () {
 			address: '43-16 34th Ave, Long Island City',
 			rating: 9.0
 		}];
+	var formattedJeremy =[]
 	var fourSquareLocations = [];
 
 	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
@@ -182,6 +183,29 @@ var ViewModel = function () {
 		}
 		self.createMarker(fourSquareLocations);
 	};
+
+	/*this.createJeremyLocations = function (loc) {
+		for (var i = 0; i < loc.length; i++){
+			var venue = loc[i].venue;
+			console.log(venue);
+			var name = venue.name;
+			var location = venue.location;
+			var category = venue.categories[0].name;
+			var rating = venue.rating;
+			var id = venue.id;
+			var object = {name: name,
+				address: location.address,
+				city: location.city,
+				lat: location.lat,
+				lng: location.lng,
+				category: category,
+				rating: rating,
+				id: id};
+			fourSquareLocations.push(new Place(object));
+			console.log(fourSquareLocations);
+		}
+		self.createMarker(fourSquareLocations);
+	};*/
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	this.markerArray = ko.observableArray([]);
@@ -308,23 +332,24 @@ var ViewModel = function () {
 		self.markerArray = [];
 	};
 
-	this.filter = ko.observable('');
+	this.query = ko.observable('');
 
-	this.search = function (value) {
-		self.clearMarkers();
+	/*this.search = ko.computed(function (value) {
+		return ko.utils.arrayFilter(self.mapLocations(), function(mapLocations) {
+			return mapLocations.category.toLowerCase().indexOf(self.query().toLowerCase()) >=0;
+		});
+	});*/
+		/*self.clearMarkers();
 
 		var filterInput = this.filter().toLowerCase();
-
 		self.mapLocations().forEach(function (mapLocations) {
 			self.clearMarkers();
-			if (mapLocations.name().toLowerCase().indexOf(filterInput) !== -1) {
-				self.mapLocations.push(item);
-			} else
-			{
-				self.mapLocations.removeAll();
+			if (self.mapLocations.name().toLowerCase().indexOf(filterInput) !== -1) {
+				self.markerArray.push(mapLocations);
+				self.setMarkerMap();
 			}
 		});
-	};
+	};*/
 
 	/*var query;
 	query.subscribe(search);*/
