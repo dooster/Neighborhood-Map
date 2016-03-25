@@ -123,7 +123,7 @@ var ViewModel = function () {
 	this.displayJerLoc = function() {
 		self.mapLocations.removeAll();
 		self.clearMarkers();
-		self.createJeremyMarker(jeremyLocations);
+		self.createJeremyLocations(jeremyLocations);
 	};
 
 	this.displayMyLoc = function() {
@@ -184,28 +184,30 @@ var ViewModel = function () {
 		self.createMarker(fourSquareLocations);
 	};
 
-	/*this.createJeremyLocations = function (loc) {
+	this.createJeremyLocations = function (loc) {
 		for (var i = 0; i < loc.length; i++){
-			var venue = loc[i].venue;
+			var venue = loc[i];
 			console.log(venue);
-			var name = venue.name;
+			var name = venue.venue;
 			var location = venue.location;
-			var category = venue.categories[0].name;
+			var category = venue.category;
+			var lat = venue.lat;
+			var lng = venue.lng;
 			var rating = venue.rating;
+			var address = venue.address;
 			var id = venue.id;
 			var object = {name: name,
-				address: location.address,
-				city: location.city,
-				lat: location.lat,
-				lng: location.lng,
+				address: address,
+				lat: lat,
+				lng: lng,
 				category: category,
 				rating: rating,
 				id: id};
-			fourSquareLocations.push(new Place(object));
+			formattedJeremy.push(new Place(object));
 			console.log(fourSquareLocations);
 		}
-		self.createMarker(fourSquareLocations);
-	};*/
+		self.createMarker(formattedJeremy);
+	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	this.markerArray = ko.observableArray([]);
@@ -331,14 +333,14 @@ var ViewModel = function () {
 		self.setMarkerMap(null);
 		self.markerArray = [];
 	};
-
+	//based on this http://codepen.io/JohnMav/pen/OVEzWM/?editors=1010
 	this.query = ko.observable('');
 
-	/*this.search = ko.computed(function (value) {
+	this.search = ko.computed(function (value) {
 		return ko.utils.arrayFilter(self.mapLocations(), function(mapLocations) {
-			return mapLocations.category.toLowerCase().indexOf(self.query().toLowerCase()) >=0;
+			return mapLocations.category().toLowerCase().indexOf(self.query().toLowerCase()) >=0;
 		});
-	});*/
+	});
 		/*self.clearMarkers();
 
 		var filterInput = this.filter().toLowerCase();
@@ -370,6 +372,7 @@ function googleError () {
 -create a Gulp workflow
 -app features thorough comments
 -create a README
+-change the way the cursor looks over the nav-item
 
 -add see location on googlemaps
 -add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures

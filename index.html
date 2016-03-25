@@ -20,8 +20,8 @@
 			<div id="nav-bar">
 				<div class="search">
 					<!-- Todo make search function work for both Jeremy's recommendations and Foursquare -->
-					<!-- <input type="search" placeholder="Pizza? Sushi? Italian?" data-bind="textInput: query, valueUpdate: 'keyup'" autocomplete="off" /> -->
-					<div id="location-list" data-bind="foreach: mapLocations">
+					<input type="search" placeholder="Pizza? Sushi? Italian?" data-bind="textInput: query, valueUpdate: 'keyup'" autocomplete="off" />
+					<div id="location-list" data-bind="foreach: search()">
 						<ul>
 							<strong data-bind="text: $data.venue, click: $parent.openInfoWindow"></strong>
 						</ul>
