@@ -29,86 +29,104 @@ var Place = function(object) {
 	this.category = ko.observable(object.category);
 	this.rating = ko.observable(object.rating);
 	this.id = ko.observable(object.id);
+	this.website = ko.observable(object.wesbite);
 };
 
 var ViewModel = function () {
 	var self=this;
 
 	var jeremyLocations = [
-		{
-			venue: 'SingleCut Beersmiths',
-			website: 'http://www.singlecutbeer.com/',
-			lat : 40.7783129,
-			lng : -73.9017037,
-			category:'Brewery Bar',
-			address: '19-33 37th St, Astoria',
-			rating: 9.4
+		{venue: {
+				name: 'SingleCut Beersmiths',
+				website: 'http://www.singlecutbeer.com/',
+				lat : 40.7783129,
+				lng : -73.9017037,
+				category:'Brewery Bar',
+				address: '19-33 37th St, Astoria',
+				rating: 9.4
+			}
 		}, {
-			venue: "Doyle's Corner",
-			website: "https://foursquare.com/v/doyles-corner/4b42d0b4f964a52022da25e3",
-			lat : 40.7580005,
-			lng : -73.91735629999999,
-			category: 'Bar and Grill',
-			address: '4202 Broadway, Astoria',
-			rating: 8.1
+		venue: {
+				name: "Doyle's Corner",
+				website: "https://foursquare.com/v/doyles-corner/4b42d0b4f964a52022da25e3",
+				lat : 40.7580005,
+				lng : -73.91735629999999,
+				category: 'Bar and Grill',
+				address: '4202 Broadway, Astoria',
+				rating: 8.1
+			}
 		}, {
-			venue: 'Yaar Indian Restaurant',
-			website: "http://www.yaarindianrestaurant.net/",
-			lat : 40.774797,
-			lng : -73.911866,
-			category: 'Indian Restaurant',
-			address: '22-55 31st St, Astoria',
-			rating: 8.4
+		venue: {
+				name: 'Yaar Indian Restaurant',
+				website: "http://www.yaarindianrestaurant.net/",
+				lat : 40.774797,
+				lng : -73.911866,
+				category: 'Indian Restaurant',
+				address: '22-55 31st St, Astoria',
+				rating: 8.4
+			}
 		}, {
-			venue: 'Bai Sushi',
+		venue: {
+			name: 'Bai Sushi',
 			website: 'https://foursquare.com/v/bai-sushi/4b2062f2f964a520a53124e3',
 			lat : 40.7597557,
 			lng : -73.92021869999999,
 			category: 'Sushi Restaurant',
 			address: '37-03 Broadway, Astoria',
 			rating: 7.9
+		}
 		}, {
-			venue: 'New York City Bagel & Coffee House',
+			venue: {
+			name: 'New York City Bagel & Coffee House',
 			website: "http://nycbch.com/",
 			lat : 40.7589623,
 			lng : -73.9185095,
 			category:'Coffee and Bagel Shop',
 			address: '40-05 Broadway, Astoria',
 			rating: 8.7
+		}
 		}, {
-			venue: 'Pye Boat Noodle',
+			venue: {
+			name: 'Pye Boat Noodle',
 			website: 'http://www.pyeboatnoodle.com/',
 			lat : 40.7604336,
 			lng : -73.92156799999999,
 			category: 'Thai Restaurant',
 			address: '35-13 Broadway, Astoria',
 			rating: 9.0
+		}
 		}, {
-			venue: 'Cafe Boulis',
+			venue: {
+			name: 'Cafe Boulis',
 			website: 'http://www.cafeboulis.com/',
 			lat : 40.7646088,
 			lng : -73.92354440000001,
 			category: 'Greek Bakery',
 			address: '31-15 31st Ave, Astoria',
 			rating: 8.4
+		}
 		}, {
-			venue: 'Bear',
+			venue: {
+			name: 'Bear',
 			website: 'https://foursquare.com/v/bear/4eb00b6ef9f463d3c3c7880c',
 			lat : 40.768372,
 			lng : -73.93303,
 			category: 'Russian Restaurant',
 			address: '12-14 31st Ave, Long Island City',
 			rating: 8.5
+		}
 		}, {
-			venue: 'Villa Brazil',
+			venue: {
+			name: 'Villa Brazil',
 			website: 'http://villabrasilcafe.com/',
 			lat : 40.7551288,
 			lng : -73.9180253,
 			category:'Brazilian Buffet',
 			address: '43-16 34th Ave, Long Island City',
 			rating: 9.0
+		}
 		}];
-	var formattedJeremy =[]
+	var formattedJeremy =[];
 	var fourSquareLocations = [];
 
 	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
@@ -123,7 +141,7 @@ var ViewModel = function () {
 	this.displayJerLoc = function() {
 		self.mapLocations.removeAll();
 		self.clearMarkers();
-		self.createJeremyMarker(jeremyLocations);
+		self.createJeremyLocations(jeremyLocations);
 	};
 
 	this.displayMyLoc = function() {
@@ -184,28 +202,28 @@ var ViewModel = function () {
 		self.createMarker(fourSquareLocations);
 	};
 
-	/*this.createJeremyLocations = function (loc) {
+	this.createJeremyLocations = function (loc) {
 		for (var i = 0; i < loc.length; i++){
 			var venue = loc[i].venue;
-			console.log(venue);
 			var name = venue.name;
-			var location = venue.location;
-			var category = venue.categories[0].name;
+			var address = venue.address;
+			var category = venue.category;
 			var rating = venue.rating;
-			var id = venue.id;
+			var lat = venue.lat;
+			var lng = venue.lng;
+			var website = venue.website;
 			var object = {name: name,
-				address: location.address,
-				city: location.city,
-				lat: location.lat,
-				lng: location.lng,
+				address: address,
+				lat: lat,
+				lng: lng,
 				category: category,
 				rating: rating,
-				id: id};
-			fourSquareLocations.push(new Place(object));
-			console.log(fourSquareLocations);
+				website: website};
+			formattedJeremy.push(new Place(object));
+			console.log(formattedJeremy);
 		}
-		self.createMarker(fourSquareLocations);
-	};*/
+		self.createJeremyMarker(formattedJeremy);
+	};
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	this.markerArray = ko.observableArray([]);
@@ -268,13 +286,11 @@ var ViewModel = function () {
 		google.maps.event.trigger(loc.marker, 'click');
 	};
 
-	this.createJeremyMarker = function(jeremyLocations) {
+	this.createJeremyMarker = function(object) {
 		self.clearMarkers();
-		for (var i = 0; i < jeremyLocations.length; i++) {
-			var loc = jeremyLocations[i];
-			self.mapLocations.push(loc);
-			(function (loc) {
-				var myLatLng = new google.maps.LatLng(loc.lat, loc.lng);
+		for (var i = 0; i < object.length; i++) {
+			(function (object) {
+				var myLatLng = new google.maps.LatLng(object.lat(), object.lng());
 				var marker = new google.maps.Marker({
 					position: myLatLng,
 					map: map,
@@ -285,13 +301,14 @@ var ViewModel = function () {
 				});
 
 				var contentString = "<div id='info-content'>" +
-					"<strong> <a href ='" + jeremyLocations[i].website + "'>" + jeremyLocations[i].venue + "</a></strong>" +
-					"<br>" + jeremyLocations[i].category + "<br>" +
-					jeremyLocations[i].address +
-					"<br> <b>FourSquare Rating: </b>" + jeremyLocations[i].rating + " out of 10" +
+					"<strong> <a href ='" + object.website + "'>" + object.venue + "</a></strong>" +
+					"<br>" + object.category + "<br>" +
+					object.address +
+					"<br> <b>FourSquare Rating: </b>" + object.rating + " out of 10" +
 					"</div>";
 
 				self.markerArray.push(marker);
+				self.mapLocations.push(object);
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
 						marker.setAnimation(null);
@@ -315,9 +332,9 @@ var ViewModel = function () {
 					if (infowindow) infowindow.close();
 				});
 
-				loc.marker = marker;
+				object.marker = marker;
 
-			}(jeremyLocations[i]));
+			}(object[i]));
 		}
 	};
 
@@ -332,13 +349,14 @@ var ViewModel = function () {
 		self.markerArray = [];
 	};
 
+	//big help for the search functionality from http://codepen.io/JohnMav/pen/OVEzWM/?editors=1010
 	this.query = ko.observable('');
 
-	/*this.search = ko.computed(function (value) {
+	this.search = ko.computed(function (value) {
 		return ko.utils.arrayFilter(self.mapLocations(), function(mapLocations) {
-			return mapLocations.category.toLowerCase().indexOf(self.query().toLowerCase()) >=0;
+			return mapLocations.category().toLowerCase().indexOf(self.query().toLowerCase()) >=0
 		});
-	});*/
+	});
 		/*self.clearMarkers();
 
 		var filterInput = this.filter().toLowerCase();
@@ -350,9 +368,6 @@ var ViewModel = function () {
 			}
 		});
 	};*/
-
-	/*var query;
-	query.subscribe(search);*/
 };
 
 function googleError () {
@@ -365,13 +380,12 @@ function googleError () {
 -add local storage
 -show user's location
 -change pin icon when selected
--implement and link another API
+-implement and link another API - delivery?
 -make website responsive across all devices
 -create a Gulp workflow
 -app features thorough comments
 -create a README
 
--add see location on googlemaps
 -add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
 -settimeout drop google markers
 
