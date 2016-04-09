@@ -37,7 +37,7 @@ var ViewModel = function () {
 	var self=this;
 
 	var jeremyLocations = [
-		{venue: {
+		{//venue: {
 				name: 'SingleCut Beersmiths',
 				website: 'http://www.singlecutbeer.com/',
 				lat : 40.7783129,
@@ -45,10 +45,10 @@ var ViewModel = function () {
 				category:'Brewery Bar',
 				address: '19-33 37th St, Astoria',
 				rating: 9.4,
-				ref: jeremyLocations
-			}
+				ref: 'jeremyLocations'
+			//}
 		}, {
-		venue: {
+		//venue: {
 				name: "Doyle's Corner",
 				website: "https://foursquare.com/v/doyles-corner/4b42d0b4f964a52022da25e3",
 				lat : 40.7580005,
@@ -56,10 +56,10 @@ var ViewModel = function () {
 				category: 'Bar and Grill',
 				address: '4202 Broadway, Astoria',
 				rating: 8.1,
-				ref: jeremyLocations
-			}
+				ref: 'jeremyLocations'
+			//}
 		}, {
-		venue: {
+		//venue: {
 				name: 'Yaar Indian Restaurant',
 				website: "http://www.yaarindianrestaurant.net/",
 				lat : 40.774797,
@@ -67,10 +67,10 @@ var ViewModel = function () {
 				category: 'Indian Restaurant',
 				address: '22-55 31st St, Astoria',
 				rating: 8.4,
-				ref: jeremyLocations
-			}
+				ref: 'jeremyLocations'
+			//}
 		}, {
-		venue: {
+		//venue: {
 			name: 'Bai Sushi',
 			website: 'https://foursquare.com/v/bai-sushi/4b2062f2f964a520a53124e3',
 			lat : 40.7597557,
@@ -78,10 +78,10 @@ var ViewModel = function () {
 			category: 'Sushi Restaurant',
 			address: '37-03 Broadway, Astoria',
 			rating: 7.9,
-			ref: jeremyLocations
-		}
+			ref: 'jeremyLocations'
+		//}
 		}, {
-			venue: {
+			//venue: {
 			name: 'New York City Bagel & Coffee House',
 			website: "http://nycbch.com/",
 			lat : 40.7589623,
@@ -89,10 +89,10 @@ var ViewModel = function () {
 			category:'Coffee and Bagel Shop',
 			address: '40-05 Broadway, Astoria',
 			rating: 8.7,
-			ref: jeremyLocations
-		}
+			ref: 'jeremyLocations'
+		//}
 		}, {
-			venue: {
+			//venue: {
 			name: 'Pye Boat Noodle',
 			website: 'http://www.pyeboatnoodle.com/',
 			lat : 40.7604336,
@@ -100,10 +100,10 @@ var ViewModel = function () {
 			category: 'Thai Restaurant',
 			address: '35-13 Broadway, Astoria',
 			rating: 9.0,
-			ref: jeremyLocations
-		}
+			ref: 'jeremyLocations'
+		//}
 		}, {
-			venue: {
+			//venue: {
 			name: 'Cafe Boulis',
 			website: 'http://www.cafeboulis.com/',
 			lat : 40.7646088,
@@ -111,10 +111,10 @@ var ViewModel = function () {
 			category: 'Greek Bakery',
 			address: '31-15 31st Ave, Astoria',
 			rating: 8.4,
-			ref: jeremyLocations
-		}
+			ref: 'jeremyLocations'
+		//}
 		}, {
-			venue: {
+			//venue: {
 			name: 'Bear',
 			website: 'https://foursquare.com/v/bear/4eb00b6ef9f463d3c3c7880c',
 			lat : 40.768372,
@@ -122,10 +122,10 @@ var ViewModel = function () {
 			category: 'Russian Restaurant',
 			address: '12-14 31st Ave, Long Island City',
 			rating: 8.5,
-			ref: jeremyLocations
-		}
+			ref: 'jeremyLocations'
+		//}
 		}, {
-			venue: {
+			//venue: {
 			name: 'Villa Brazil',
 			website: 'http://villabrasilcafe.com/',
 			lat : 40.7551288,
@@ -133,8 +133,8 @@ var ViewModel = function () {
 			category:'Brazilian Buffet',
 			address: '43-16 34th Ave, Long Island City',
 			rating: 9.0,
-			ref: jeremyLocations
-		}
+			ref: 'jeremyLocations'
+		//}
 		}];
 	var formattedJeremy =[];
 	var fourSquareLocations = [];
@@ -145,12 +145,13 @@ var ViewModel = function () {
 	this.displayResults = function() {
 		self.mapLocations.removeAll();
 		self.clearMarkers();
-		this.createMarker(fourSquareLocations);
+		self.createMarker(fourSquareLocations);
 	};
 
 	this.displayJerLoc = function() {
 		self.mapLocations.removeAll();
 		self.clearMarkers();
+		formattedJeremy.length = 0;
 		self.createLocations(jeremyLocations);
 	};
 
@@ -188,11 +189,12 @@ var ViewModel = function () {
 		});
 	};
 	this.getFourSquare();
+
 	//partially based off of the discussion at https://discussions.udacity.com/t/p5-status-check-in/29104
 	this.createLocations = function (loc) {
-		for (var i = 0; i < loc.length; i++){
-			var venue = loc[i].venue;
-			if (venue.hasOwnProperty('ref')) {
+		for (var i =0; i < loc.length; i++) {
+			if ('ref' in loc[i]) {
+				var venue = loc[i];
 				var name = venue.name;
 				var address = venue.address;
 				var category = venue.category;
@@ -210,8 +212,8 @@ var ViewModel = function () {
 					website: website,
 					ref: ref};
 				formattedJeremy.push(new Place(object));
-				console.log(formattedJeremy);
 			} else {
+				var venue = loc[i].venue;
 				console.log(venue);
 				var name = venue.name;
 				var location = venue.location;
@@ -227,12 +229,20 @@ var ViewModel = function () {
 					rating: rating,
 					id: id};
 				fourSquareLocations.push(new Place(object));
-				console.log(fourSquareLocations);
 			}
 		}
-		self.createMarker(fourSquareLocations);
-		self.createMarker(formattedJeremy);
+		for (var i = 8; i < loc.length; i++) {
+			if ('ref' in loc[i]) {
+				self.createMarker(formattedJeremy);
+			} else {
+				self.createMarker(fourSquareLocations);
+			}
+		}
+		console.log(formattedJeremy);
+		console.log(fourSquareLocations);
 	};
+
+	//this.createLocations(jeremyLocations);
 
 	/*this.createJeremyLocations = function (loc) {
 		for (var i = 0; i < loc.length; i++){
@@ -257,37 +267,45 @@ var ViewModel = function () {
 		self.createJeremyMarker(formattedJeremy);
 	};*/
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
-	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	this.markerArray = ko.observableArray([]);
 
 	var infowindow, location;
 
+	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	this.createMarker = function(locations) {
 		self.clearMarkers();
 		for (var i = 0; i < locations.length; i++) {
 			(function (locations) {
 				var myLatLng = new google.maps.LatLng(locations.lat(), locations.lng());
-				var marker = new google.maps.Marker({
-					position: myLatLng,
-					map: map,
-					clickable: true,
-					animation: google.maps.Animation.DROP
-				});
+
 				var attributionURL = 'https://foursquare.com/v/';
-				if (locations.hasOwnProperty('ref')) {
-					google.maps.Marker.icon = 'img/1458190296_location_3-03.svg';
+
+				if (locations.ref() === undefined) {
+					var marker = new google.maps.Marker({
+						position: myLatLng,
+						map: map,
+						clickable: true,
+						animation: google.maps.Animation.DROP
+					});
 					var contentString = "<div id='info-content'>" +
-						"<strong> <a href ='" + locations.website + "'>" + locations.venue + "</a></strong>" +
-						"<br>" + locations.category + "<br>" +
-						locations.address +
-						"<br> <b>FourSquare Rating: </b>" + locations.rating + " out of 10" +
-						"</div>";
-				} else {
-					contentString = "<div id='info-content'>" +
 						"<strong> <a href ='" + attributionURL + locations.id() + "'>" + locations.venue() + "</a></strong>" +
 						"<br>" + locations.category() + "<br>" +
 						locations.address() + ", " + locations.city() + "<br>" +
 						"<b>FourSquare Rating: </b>" + locations.rating() + " out of 10" +
+						"</div>";
+				} else {
+					marker = new google.maps.Marker({
+						position: myLatLng,
+						map: map,
+						clickable: true,
+						animation: google.maps.Animation.DROP,
+						icon: 'img/1458190296_location_3-03.svg'
+					});
+					contentString = "<div id='info-content'>" +
+						"<strong> <a href ='" + locations.website() + "'>" + locations.venue() + "</a></strong>" +
+						"<br>" + locations.category() + "<br>" +
+						locations.address() +
+						"<br> <b>FourSquare Rating: </b>" + locations.rating() + " out of 10" +
 						"</div>";
 				}
 
