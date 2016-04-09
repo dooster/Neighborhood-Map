@@ -37,40 +37,34 @@ var ViewModel = function () {
 	var self=this;
 
 	var jeremyLocations = [
-		{//venue: {
-				name: 'SingleCut Beersmiths',
-				website: 'http://www.singlecutbeer.com/',
-				lat : 40.7783129,
-				lng : -73.9017037,
-				category:'Brewery Bar',
-				address: '19-33 37th St, Astoria',
-				rating: 9.4,
-				ref: 'jeremyLocations'
-			//}
+		{
+			name: 'SingleCut Beersmiths',
+			website: 'http://www.singlecutbeer.com/',
+			lat : 40.7783129,
+			lng : -73.9017037,
+			category:'Brewery Bar',
+			address: '19-33 37th St, Astoria',
+			rating: 9.4,
+			ref: 'jeremyLocations'
 		}, {
-		//venue: {
-				name: "Doyle's Corner",
-				website: "https://foursquare.com/v/doyles-corner/4b42d0b4f964a52022da25e3",
-				lat : 40.7580005,
-				lng : -73.91735629999999,
-				category: 'Bar and Grill',
-				address: '4202 Broadway, Astoria',
-				rating: 8.1,
-				ref: 'jeremyLocations'
-			//}
+			name: "Doyle's Corner",
+			website: "https://foursquare.com/v/doyles-corner/4b42d0b4f964a52022da25e3",
+			lat : 40.7580005,
+			lng : -73.91735629999999,
+			category: 'Bar and Grill',
+			address: '4202 Broadway, Astoria',
+			rating: 8.1,
+			ref: 'jeremyLocations'
 		}, {
-		//venue: {
-				name: 'Yaar Indian Restaurant',
-				website: "http://www.yaarindianrestaurant.net/",
-				lat : 40.774797,
-				lng : -73.911866,
-				category: 'Indian Restaurant',
-				address: '22-55 31st St, Astoria',
-				rating: 8.4,
-				ref: 'jeremyLocations'
-			//}
+			name: 'Yaar Indian Restaurant',
+			website: "http://www.yaarindianrestaurant.net/",
+			lat : 40.774797,
+			lng : -73.911866,
+			category: 'Indian Restaurant',
+			address: '22-55 31st St, Astoria',
+			rating: 8.4,
+			ref: 'jeremyLocations'
 		}, {
-		//venue: {
 			name: 'Bai Sushi',
 			website: 'https://foursquare.com/v/bai-sushi/4b2062f2f964a520a53124e3',
 			lat : 40.7597557,
@@ -79,9 +73,7 @@ var ViewModel = function () {
 			address: '37-03 Broadway, Astoria',
 			rating: 7.9,
 			ref: 'jeremyLocations'
-		//}
 		}, {
-			//venue: {
 			name: 'New York City Bagel & Coffee House',
 			website: "http://nycbch.com/",
 			lat : 40.7589623,
@@ -90,9 +82,7 @@ var ViewModel = function () {
 			address: '40-05 Broadway, Astoria',
 			rating: 8.7,
 			ref: 'jeremyLocations'
-		//}
 		}, {
-			//venue: {
 			name: 'Pye Boat Noodle',
 			website: 'http://www.pyeboatnoodle.com/',
 			lat : 40.7604336,
@@ -101,9 +91,7 @@ var ViewModel = function () {
 			address: '35-13 Broadway, Astoria',
 			rating: 9.0,
 			ref: 'jeremyLocations'
-		//}
 		}, {
-			//venue: {
 			name: 'Cafe Boulis',
 			website: 'http://www.cafeboulis.com/',
 			lat : 40.7646088,
@@ -112,9 +100,7 @@ var ViewModel = function () {
 			address: '31-15 31st Ave, Astoria',
 			rating: 8.4,
 			ref: 'jeremyLocations'
-		//}
 		}, {
-			//venue: {
 			name: 'Bear',
 			website: 'https://foursquare.com/v/bear/4eb00b6ef9f463d3c3c7880c',
 			lat : 40.768372,
@@ -123,9 +109,7 @@ var ViewModel = function () {
 			address: '12-14 31st Ave, Long Island City',
 			rating: 8.5,
 			ref: 'jeremyLocations'
-		//}
 		}, {
-			//venue: {
 			name: 'Villa Brazil',
 			website: 'http://villabrasilcafe.com/',
 			lat : 40.7551288,
@@ -134,7 +118,6 @@ var ViewModel = function () {
 			address: '43-16 34th Ave, Long Island City',
 			rating: 9.0,
 			ref: 'jeremyLocations'
-		//}
 		}];
 	var formattedJeremy =[];
 	var fourSquareLocations = [];
