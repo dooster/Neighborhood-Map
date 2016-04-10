@@ -386,9 +386,13 @@ var ViewModel = function () {
 	//big help for the search functionality from http://codepen.io/JohnMav/pen/OVEzWM/?editors=1010
 	this.query = ko.observable('');
 
+	//help with filtering map markers https://discussions.udacity.com/t/google-map-marker-filter-issues/15244/5
 	this.search = ko.computed(function (value) {
 		return ko.utils.arrayFilter(self.mapLocations(), function(mapLocations) {
 			if (mapLocations.category().toLowerCase().indexOf(self.query().toLowerCase()) >=0) {
+				if (mapLocations.marker) {
+					mapLocations.marker.setVisible(true);
+				}
 				return true;
 			} else {
 				mapLocations.marker.setVisible(false);
@@ -402,7 +406,6 @@ function googleError () {
 };
 
 /*Todo
--create search functionality
 -add extra features to search such as autocomplete
 -add local storage
 -show user's location
