@@ -214,12 +214,10 @@ var ViewModel = function () {
 				fourSquareLocations.push(new Place(object));
 			}
 		}
-		for (var i = 8; i < loc.length; i++) {
-			if ('ref' in loc[i]) {
-				self.createMarker(formattedJeremy);
-			} else {
-				self.createMarker(fourSquareLocations);
-			}
+		if (loc.length < 29) {
+			self.createMarker(formattedJeremy);
+		} else {
+			self.createMarker(fourSquareLocations);
 		}
 		console.log(formattedJeremy);
 		console.log(fourSquareLocations);
@@ -313,7 +311,6 @@ var ViewModel = function () {
 				});
 
 				locations.marker = marker;
-
 			}(locations[i]));
 		}
 	};
