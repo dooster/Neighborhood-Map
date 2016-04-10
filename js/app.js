@@ -388,7 +388,11 @@ var ViewModel = function () {
 
 	this.search = ko.computed(function (value) {
 		return ko.utils.arrayFilter(self.mapLocations(), function(mapLocations) {
-			return mapLocations.category().toLowerCase().indexOf(self.query().toLowerCase()) >=0
+			if (mapLocations.category().toLowerCase().indexOf(self.query().toLowerCase()) >=0) {
+				return true;
+			} else {
+				mapLocations.marker.setVisible(false);
+			}
 		});
 	});
 };
