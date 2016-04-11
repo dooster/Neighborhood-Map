@@ -6,12 +6,19 @@ var initMap = function () {
 
 	map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-	var bounds = {
+	var sw = new google.maps.LatLng(40.753547, -73.942808);
+	var ne = new google.maps.LatLng(40.782769, -73.897018);
+
+	var bounds = new google.maps.LatLngBounds();
+	bounds.extend(sw);
+	bounds.extend(ne);
+
+	/*{
 		north: 40.782769,
 		south: 40.753547,
 		east: -73.897018,
 		west: -73.942808
-	};
+	};*/
 
 	map.fitBounds(bounds);
 
