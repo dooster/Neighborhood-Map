@@ -230,24 +230,6 @@ var ViewModel = function () {
 		console.log(fourSquareLocations);
 	};
 
-	/*this.createJeremyLocations = function (loc) {
-		for (var i = 0; i < loc.length; i++){
-			var venue = loc[i].venue;
-			var name = venue.name;
-			var address = venue.address;
-			var category = venue.category;
-			var rating = venue.rating;
-			var object = {name: name,
-				address: address,
-				lat: lat,
-				lng: lng,
-				category: category,
-				rating: rating,
-				website: website};
-			formattedJeremy.push(new Place(object));
-			console.log(formattedJeremy);
-		self.createJeremyMarker(formattedJeremy);
-	};*/
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	this.markerArray = ko.observableArray([]);
 
@@ -281,6 +263,7 @@ var ViewModel = function () {
 						map: map,
 						clickable: true,
 						animation: google.maps.Animation.DROP,
+						//free icon from https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
 						icon: 'img/1458190296_location_3-03.svg'
 					});
 					contentString = "<div id='info-content'>" +
@@ -327,58 +310,6 @@ var ViewModel = function () {
 		google.maps.event.trigger(loc.marker, 'click');
 	};
 
-	/*this.createJeremyMarker = function(object) {
-		self.clearMarkers();
-		for (var i = 0; i < object.length; i++) {
-			(function (object) {
-				var myLatLng = new google.maps.LatLng(object.lat(), object.lng());
-				var marker = new google.maps.Marker({
-					position: myLatLng,
-					map: map,
-					clickable: true,
-					animation: google.maps.Animation.DROP,
-					icon: 'img/1458190296_location_3-03.svg'
-					//https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
-				});
-
-				var contentString = "<div id='info-content'>" +
-					"<strong> <a href ='" + object.website + "'>" + object.venue + "</a></strong>" +
-					"<br>" + object.category + "<br>" +
-					object.address +
-					"<br> <b>FourSquare Rating: </b>" + object.rating + " out of 10" +
-					"</div>";
-
-				self.markerArray.push(marker);
-				self.mapLocations.push(object);
-				google.maps.event.addListener(marker, 'click', function() {
-					if (marker.getAnimation() !== null) {
-						marker.setAnimation(null);
-					} else {
-						marker.setAnimation(google.maps.Animation.BOUNCE);
-					}
-					setTimeout(function() {
-						marker.setAnimation(null);
-					}, 1500);
-				}, false);
-
-				google.maps.event.addListener(marker, 'click', function() {
-					if (infowindow) infowindow.close();
-					infowindow = new google.maps.InfoWindow({
-						content: contentString
-					});
-					infowindow.open(map, marker);
-				});
-
-				google.maps.event.addListener(map, 'click', function() {
-					if (infowindow) infowindow.close();
-				});
-
-				object.marker = marker;
-
-			}(object[i]));
-		}
-	};*/
-
 	this.setMarkerMap = function(map) {
 		for (var i = 0; i < self.markerArray.length; i++) {
 			self.markerArray[i].setMap(map);
@@ -390,6 +321,17 @@ var ViewModel = function () {
 		self.markerArray = [];
 	};
 
+	var hamburger = document.getElementById('hamburger');
+	var nav = document.getElementById('nav-bar');
+
+		hamburger.addEventListener("click", function() {
+			if (nav.style.visibility == "visible") {
+				nav.style.visibility = "hidden";
+			} else {
+				nav.style.visibility = "visible";
+			}
+			//e.preventDefault();
+		});
 	//big help for the search functionality from http://codepen.io/JohnMav/pen/OVEzWM/?editors=1010
 	this.query = ko.observable('');
 
@@ -418,13 +360,12 @@ function googleError () {
 -show user's location
 -change pin icon when selected
 -implement and link another API - delivery?
--make website responsive across all devices
+-make CSS transition
 -create a Gulp workflow
 -app features thorough comments
 -create a README
 -change the way the cursor looks over the nav-item
 
--add map bounds https://developers.google.com/maps/documentation/javascript/events#EventClosures
 -settimeout drop google markers
 
 -add Jeremy vs Jen locations
