@@ -12,14 +12,6 @@ var initMap = function () {
 	var bounds = new google.maps.LatLngBounds();
 	bounds.extend(sw);
 	bounds.extend(ne);
-
-	/*{
-		north: 40.782769,
-		south: 40.753547,
-		east: -73.897018,
-		west: -73.942808
-	};*/
-
 	map.fitBounds(bounds);
 
 	ko.applyBindings(new ViewModel());
@@ -42,6 +34,8 @@ var Place = function(object) {
 
 var ViewModel = function () {
 	var self=this;
+
+	localStorage = JSON.stringify([]);
 
 	var jeremyLocations = [
 		{
@@ -128,8 +122,8 @@ var ViewModel = function () {
 		}];
 	var formattedJeremy =[];
 	var fourSquareLocations = [];
+	var savedLocations = []; //I think this needs its own array to store user's saved selections
 
-	this.savedLocations = ko.observableArray([]); //I think this needs its own array to store user's saved selections
 	this.mapLocations = ko.observableArray();
 
 	this.displayResults = function() {
@@ -145,11 +139,18 @@ var ViewModel = function () {
 		self.createLocations(jeremyLocations);
 	};
 
-	this.displayMyLoc = function() {
+	this.displaySaved = function() {
 		this.mapLocations.removeAll();
-		self.savedLocations().forEach(function(item){
-			self.mapLocations.push(item);
-		});
+		self.clearMarkers();
+		self.createMarker(savedLocations);
+	};
+
+	this.pushSave = function(locations) {
+		savedLocations.push(locations);
+		console.log("hi");
+		/*localStorage.setItem("location", JSON.stringify(location));
+		var location = localStorage.getItem('location');
+		console.log(location);*/
 	};
 
 	this.getFourSquare = function() {
@@ -204,7 +205,7 @@ var ViewModel = function () {
 				formattedJeremy.push(new Place(object));
 			} else {
 				var venue = loc[i].venue;
-				console.log(venue);
+				//console.log(venue);
 				var name = venue.name;
 				var location = venue.location;
 				var category = venue.categories[0].name;
@@ -226,14 +227,14 @@ var ViewModel = function () {
 		} else {
 			self.createMarker(fourSquareLocations);
 		}
-		console.log(formattedJeremy);
-		console.log(fourSquareLocations);
+		//console.log(formattedJeremy);
+		//console.log(fourSquareLocations);
 	};
 
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	this.markerArray = ko.observableArray([]);
 
-	var infowindow, location;
+	var infowindow, location, button;
 
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	this.createMarker = function(locations) {
@@ -244,6 +245,8 @@ var ViewModel = function () {
 
 				var attributionURL = 'https://foursquare.com/v/';
 
+				var contentString = document.createElement('div');
+
 				if (locations.ref() === undefined) {
 					var marker = new google.maps.Marker({
 						position: myLatLng,
@@ -251,7 +254,7 @@ var ViewModel = function () {
 						clickable: true,
 						animation: google.maps.Animation.DROP
 					});
-					var contentString = "<div id='info-content'>" +
+					contentString.innerHTML = "<div id='info-content'>" +
 						"<strong> <a href ='" + attributionURL + locations.id() + "'>" + locations.venue() + "</a></strong>" +
 						"<br>" + locations.category() + "<br>" +
 						locations.address() + ", " + locations.city() + "<br>" +
@@ -266,13 +269,21 @@ var ViewModel = function () {
 						//free icon from https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
 						icon: 'img/1458190296_location_3-03.svg'
 					});
-					contentString = "<div id='info-content'>" +
+					contentString.innerHTML = "<div id='info-content'>" +
 						"<strong> <a href ='" + locations.website() + "'>" + locations.venue() + "</a></strong>" +
 						"<br>" + locations.category() + "<br>" +
 						locations.address() +
 						"<br> <b>FourSquare Rating: </b>" + locations.rating() + " out of 10" +
 						"</div>";
 				}
+
+				//creating function calls within an infowindow thanks to http://stackoverflow.com/questions/21327691/function-calls-within-infowindows
+				button = contentString.appendChild(document.createElement('input'));
+				button.type = 'button';
+				button.value = 'Save location!';
+				google.maps.event.addDomListener(button, 'click', function(){
+					self.pushSave(locations);
+				});
 
 				self.mapLocations.push(locations);
 				self.markerArray.push(marker);
@@ -330,7 +341,6 @@ var ViewModel = function () {
 			} else {
 				nav.style.visibility = "visible";
 			}
-			//e.preventDefault();
 		});
 	//big help for the search functionality from http://codepen.io/JohnMav/pen/OVEzWM/?editors=1010
 	this.query = ko.observable('');
