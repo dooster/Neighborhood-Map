@@ -35,8 +35,6 @@ var Place = function(object) {
 var ViewModel = function () {
 	var self=this;
 
-	localStorage = JSON.stringify([]);
-
 	var jeremyLocations = [
 		{
 			name: 'SingleCut Beersmiths',
@@ -122,8 +120,7 @@ var ViewModel = function () {
 		}];
 	var formattedJeremy =[];
 	var fourSquareLocations = [];
-	var savedLocations = []; //I think this needs its own array to store user's saved selections
-
+	var savedLocations = [];
 	this.mapLocations = ko.observableArray();
 
 	this.displayResults = function() {
@@ -142,15 +139,23 @@ var ViewModel = function () {
 	this.displaySaved = function() {
 		this.mapLocations.removeAll();
 		self.clearMarkers();
-		self.createMarker(savedLocations);
+		var items = localStorage.getItem("savedLocations");
+		var localItems = JSON.parse(localStorage.getItem('savedLocations'));
+		console.log(localStorage, savedLocations, localItems);
+		//self.mapLocations.push(localItems);
+		savedLocations.push(localItems);
+		self.createLocations(savedLocations);
+		//self.createMarker(savedLocations);
 	};
 
 	this.pushSave = function(locations) {
+		console.log(locations);
+		delete locations.marker;
+		console.log(locations);
 		savedLocations.push(locations);
-		console.log("hi");
-		/*localStorage.setItem("location", JSON.stringify(location));
-		var location = localStorage.getItem('location');
-		console.log(location);*/
+		var jsonData = ko.toJSON(locations)
+		localStorage.setItem("savedLocations", jsonData);
+		console.log(savedLocations);
 	};
 
 	this.getFourSquare = function() {
@@ -255,10 +260,10 @@ var ViewModel = function () {
 						animation: google.maps.Animation.DROP
 					});
 					contentString.innerHTML = "<div id='info-content'>" +
-						"<strong> <a href ='" + attributionURL + locations.id() + "'>" + locations.venue() + "</a></strong>" +
+						"<a href ='" + attributionURL + locations.id() + "'>" + locations.venue() + "</a>" +
 						"<br>" + locations.category() + "<br>" +
 						locations.address() + ", " + locations.city() + "<br>" +
-						"<b>FourSquare Rating: </b>" + locations.rating() + " out of 10" +
+						"FourSquare Rating: " + locations.rating() + " out of 10" +
 						"</div>";
 				} else {
 					marker = new google.maps.Marker({
@@ -270,10 +275,10 @@ var ViewModel = function () {
 						icon: 'img/1458190296_location_3-03.svg'
 					});
 					contentString.innerHTML = "<div id='info-content'>" +
-						"<strong> <a href ='" + locations.website() + "'>" + locations.venue() + "</a></strong>" +
+						"<a href ='" + locations.website() + "'>" + locations.venue() + "</a>" +
 						"<br>" + locations.category() + "<br>" +
 						locations.address() +
-						"<br> <b>FourSquare Rating: </b>" + locations.rating() + " out of 10" +
+						"<br>FourSquare Rating: " + locations.rating() + " out of 10" +
 						"</div>";
 				}
 
@@ -282,7 +287,9 @@ var ViewModel = function () {
 				button.type = 'button';
 				button.value = 'Save location!';
 				google.maps.event.addDomListener(button, 'click', function(){
-					self.pushSave(locations);
+					if (savedLocations.indexOf(locations) === -1) {
+						self.pushSave(locations);
+					}
 				});
 
 				self.mapLocations.push(locations);
@@ -368,7 +375,6 @@ function googleError () {
 -add extra features to search such as autocomplete
 -add local storage
 -show user's location
--change pin icon when selected
 -implement and link another API - delivery?
 -make CSS transition
 -create a Gulp workflow
