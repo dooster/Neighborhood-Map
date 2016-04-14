@@ -143,18 +143,21 @@ var ViewModel = function () {
 		var localItems = JSON.parse(localStorage.getItem('savedLocations'));
 		console.log(localStorage, savedLocations, localItems);
 		//self.mapLocations.push(localItems);
-		savedLocations.push(localItems);
-		self.createLocations(savedLocations);
+		//savedLocations.push(localItems);
+		self.createLocations(items);
 		//self.createMarker(savedLocations);
 	};
 
 	this.pushSave = function(locations) {
-		console.log(locations);
 		delete locations.marker;
 		console.log(locations);
 		savedLocations.push(locations);
-		var jsonData = ko.toJSON(locations)
-		localStorage.setItem("savedLocations", jsonData);
+		if (!localStorage.savedLocations) {
+			localStorage.savedLocations = JSON.stringify([]);
+		};
+		var localData = JSON.parse(localStorage.savedLocations);
+		localData.push(locations);
+		localStorage.savedLocations = ko.toJSON(localData);
 		console.log(savedLocations);
 	};
 
