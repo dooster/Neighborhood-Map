@@ -140,6 +140,7 @@ var ViewModel = function () {
 	this.displaySaved = function() {
 		self.mapLocations([]);
 		self.clearMarkers();
+		formattedSaved.length = 0;
 		var localItems = JSON.parse(localStorage.getItem('savedLocations'));
 		console.log(localItems);
 		//self.savedMarkers(localItems);
@@ -235,8 +236,6 @@ var ViewModel = function () {
 		} else {
 			self.createMarker(fourSquareLocations);
 		}
-		//console.log(formattedJeremy);
-		//console.log(fourSquareLocations);
 	};
 
 	this.createSavedLocations = function(loc) {
@@ -323,6 +322,7 @@ var ViewModel = function () {
 					if (savedLocations.indexOf(locations) === -1) {
 						savedLocations.push(locations);
 						self.pushSave(locations);
+						console.log(savedLocations);
 					}
 				});
 
