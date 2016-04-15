@@ -28,7 +28,7 @@ var Place = function(object) {
 	this.category = ko.observable(object.category);
 	this.rating = ko.observable(object.rating);
 	this.id = ko.observable(object.id);
-	this.website = ko.observable(object.wesbite);
+	this.website = ko.observable(object.website);
 	this.ref = ko.observable(object.ref);
 };
 
@@ -121,6 +121,7 @@ var ViewModel = function () {
 	var formattedJeremy =[];
 	var fourSquareLocations = [];
 	var savedLocations = [];
+	var formattedSaved =[];
 	this.mapLocations = ko.observableArray();
 
 	this.displayResults = function() {
@@ -137,21 +138,21 @@ var ViewModel = function () {
 	};
 
 	this.displaySaved = function() {
-		this.mapLocations.removeAll();
+		self.mapLocations([]);
 		self.clearMarkers();
-		var items = localStorage.getItem("savedLocations");
 		var localItems = JSON.parse(localStorage.getItem('savedLocations'));
-		console.log(localStorage, savedLocations, localItems);
-		//self.mapLocations.push(localItems);
+		console.log(localItems);
+		//self.savedMarkers(localItems);
+		//self.mapLocations.push(items);
 		//savedLocations.push(localItems);
-		self.createLocations(items);
+		self.createSavedLocations(localItems);
 		//self.createMarker(savedLocations);
 	};
 
 	this.pushSave = function(locations) {
 		delete locations.marker;
 		console.log(locations);
-		savedLocations.push(locations);
+		console.log(savedLocations);
 		if (!localStorage.savedLocations) {
 			localStorage.savedLocations = JSON.stringify([]);
 		};
@@ -213,7 +214,6 @@ var ViewModel = function () {
 				formattedJeremy.push(new Place(object));
 			} else {
 				var venue = loc[i].venue;
-				//console.log(venue);
 				var name = venue.name;
 				var location = venue.location;
 				var category = venue.categories[0].name;
@@ -237,6 +237,36 @@ var ViewModel = function () {
 		}
 		//console.log(formattedJeremy);
 		//console.log(fourSquareLocations);
+	};
+
+	this.createSavedLocations = function(loc) {
+		for (var i =0; i < loc.length; i++) {
+			var venue = loc[i];
+			var name = venue.venue;
+			var address = venue.address;
+			var city = venue.city;
+			var category = venue.category;
+			var rating = venue.rating;
+			var lat = venue.lat;
+			var lng = venue.lng;
+			var id = venue.id;
+			var ref = venue.ref;
+			var website = venue.website;
+			var object = {name: name,
+				address: address,
+				lat: lat,
+				lng: lng,
+				category: category,
+				rating: rating,
+				website: website,
+				id: id,
+				ref: ref,
+				city: city};
+			formattedSaved.push(new Place(object));
+			console.log(savedLocations);
+			}
+		console.log(formattedSaved);
+		self.savedMarkers(formattedSaved);
 	};
 
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
@@ -291,9 +321,81 @@ var ViewModel = function () {
 				button.value = 'Save location!';
 				google.maps.event.addDomListener(button, 'click', function(){
 					if (savedLocations.indexOf(locations) === -1) {
+						savedLocations.push(locations);
 						self.pushSave(locations);
 					}
 				});
+
+				self.mapLocations.push(locations);
+				self.markerArray.push(marker);
+
+				google.maps.event.addListener(marker, 'click', function() {
+					if (marker.getAnimation() !== null) {
+						marker.setAnimation(null);
+					} else {
+						marker.setAnimation(google.maps.Animation.BOUNCE);
+					}
+					setTimeout(function() {
+						marker.setAnimation(null);
+					}, 1200);
+				}, false);
+
+				google.maps.event.addListener(marker, 'click', function() {
+					if (infowindow) infowindow.close();
+					infowindow = new google.maps.InfoWindow({
+						content: contentString
+					});
+					infowindow.open(map, marker);
+				});
+
+				google.maps.event.addListener(map, 'click', function() {
+					if (infowindow) infowindow.close();
+				});
+
+				locations.marker = marker;
+			}(locations[i]));
+		}
+	};
+
+	this.savedMarkers = function (locations) {
+		self.clearMarkers();
+		for (var i = 0; i < locations.length; i++) {
+			(function (locations) {
+				var myLatLng = new google.maps.LatLng(locations.lat(), locations.lng());
+
+				var attributionURL = 'https://foursquare.com/v/';
+
+				var contentString = document.createElement('div');
+
+				if (locations.ref() === undefined) {
+					var marker = new google.maps.Marker({
+						position: myLatLng,
+						map: map,
+						clickable: true,
+						animation: google.maps.Animation.DROP
+					});
+					contentString.innerHTML = "<div id='info-content'>" +
+						"<a href ='" + attributionURL + locations.id() + "'>" + locations.venue() + "</a>" +
+						"<br>" + locations.category() + "<br>" +
+						locations.address() + ", " + locations.city() + "<br>" +
+						"FourSquare Rating: " + locations.rating() + " out of 10" +
+						"</div>";
+				} else {
+					marker = new google.maps.Marker({
+						position: myLatLng,
+						map: map,
+						clickable: true,
+						animation: google.maps.Animation.DROP,
+						//free icon from https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
+						icon: 'img/1458190296_location_3-03.svg'
+					});
+					contentString.innerHTML = "<div id='info-content'>" +
+						"<a href ='" + locations.website() + "'>" + locations.venue() + "</a>" +
+						"<br>" + locations.category() + "<br>" +
+						locations.address() +
+						"<br>FourSquare Rating: " + locations.rating() + " out of 10" +
+						"</div>";
+				}
 
 				self.mapLocations.push(locations);
 				self.markerArray.push(marker);
