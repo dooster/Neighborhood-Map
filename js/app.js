@@ -143,24 +143,22 @@ var ViewModel = function () {
 		formattedSaved.length = 0;
 		var localItems = JSON.parse(localStorage.getItem('savedLocations'));
 		console.log(localItems);
-		//self.savedMarkers(localItems);
-		//self.mapLocations.push(items);
-		//savedLocations.push(localItems);
 		self.createSavedLocations(localItems);
-		//self.createMarker(savedLocations);
 	};
 
 	this.pushSave = function(locations) {
 		delete locations.marker;
-		console.log(locations);
-		console.log(savedLocations);
 		if (!localStorage.savedLocations) {
 			localStorage.savedLocations = JSON.stringify([]);
 		};
 		var localData = JSON.parse(localStorage.savedLocations);
-		localData.push(locations);
-		localStorage.savedLocations = ko.toJSON(localData);
-		console.log(savedLocations);
+		console.log(localData);
+		if (JSON.stringify(localData).indexOf(locations.venue()) === -1) {
+			localData.push(locations);
+			localStorage.savedLocations = ko.toJSON(localData);;
+		} else {
+			return;
+		}
 	};
 
 	this.getFourSquare = function() {
@@ -478,7 +476,6 @@ function googleError () {
 
 /*Todo
 -add extra features to search such as autocomplete
--add local storage
 -show user's location
 -implement and link another API - delivery?
 -make CSS transition
