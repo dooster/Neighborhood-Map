@@ -439,7 +439,6 @@ function googleError () {
 -add extra features to search such as autocomplete
 -show user's location
 -implement and link another API - delivery?
--create a Gulp workflow
 -create a README
 -change the way the cursor looks over the nav-item
 
