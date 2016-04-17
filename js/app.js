@@ -142,7 +142,6 @@ var ViewModel = function () {
 		self.clearMarkers();
 		formattedSaved.length = 0;
 		var localItems = JSON.parse(localStorage.getItem('savedLocations'));
-		console.log(localItems);
 		self.createSavedLocations(localItems);
 	};
 
@@ -152,7 +151,6 @@ var ViewModel = function () {
 			localStorage.savedLocations = JSON.stringify([]);
 		};
 		var localData = JSON.parse(localStorage.savedLocations);
-		console.log(localData);
 		if (JSON.stringify(localData).indexOf(locations.venue()) === -1) {
 			localData.push(locations);
 			localStorage.savedLocations = ko.toJSON(localData);;
@@ -260,10 +258,8 @@ var ViewModel = function () {
 				ref: ref,
 				city: city};
 			formattedSaved.push(new Place(object));
-			console.log(savedLocations);
 			}
-		console.log(formattedSaved);
-		self.savedMarkers(formattedSaved);
+		self.createMarker(formattedSaved);
 	};
 
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
@@ -320,80 +316,8 @@ var ViewModel = function () {
 					if (savedLocations.indexOf(locations) === -1) {
 						savedLocations.push(locations);
 						self.pushSave(locations);
-						console.log(savedLocations);
 					}
 				});
-
-				self.mapLocations.push(locations);
-				self.markerArray.push(marker);
-
-				google.maps.event.addListener(marker, 'click', function() {
-					if (marker.getAnimation() !== null) {
-						marker.setAnimation(null);
-					} else {
-						marker.setAnimation(google.maps.Animation.BOUNCE);
-					}
-					setTimeout(function() {
-						marker.setAnimation(null);
-					}, 1200);
-				}, false);
-
-				google.maps.event.addListener(marker, 'click', function() {
-					if (infowindow) infowindow.close();
-					infowindow = new google.maps.InfoWindow({
-						content: contentString
-					});
-					infowindow.open(map, marker);
-				});
-
-				google.maps.event.addListener(map, 'click', function() {
-					if (infowindow) infowindow.close();
-				});
-
-				locations.marker = marker;
-			}(locations[i]));
-		}
-	};
-
-	this.savedMarkers = function (locations) {
-		self.clearMarkers();
-		for (var i = 0; i < locations.length; i++) {
-			(function (locations) {
-				var myLatLng = new google.maps.LatLng(locations.lat(), locations.lng());
-
-				var attributionURL = 'https://foursquare.com/v/';
-
-				var contentString = document.createElement('div');
-
-				if (locations.ref() === undefined) {
-					var marker = new google.maps.Marker({
-						position: myLatLng,
-						map: map,
-						clickable: true,
-						animation: google.maps.Animation.DROP
-					});
-					contentString.innerHTML = "<div id='info-content'>" +
-						"<a href ='" + attributionURL + locations.id() + "'>" + locations.venue() + "</a>" +
-						"<br>" + locations.category() + "<br>" +
-						locations.address() + ", " + locations.city() + "<br>" +
-						"FourSquare Rating: " + locations.rating() + " out of 10" +
-						"</div>";
-				} else {
-					marker = new google.maps.Marker({
-						position: myLatLng,
-						map: map,
-						clickable: true,
-						animation: google.maps.Animation.DROP,
-						//free icon from https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
-						icon: 'img/1458190296_location_3-03.svg'
-					});
-					contentString.innerHTML = "<div id='info-content'>" +
-						"<a href ='" + locations.website() + "'>" + locations.venue() + "</a>" +
-						"<br>" + locations.category() + "<br>" +
-						locations.address() +
-						"<br>FourSquare Rating: " + locations.rating() + " out of 10" +
-						"</div>";
-				}
 
 				self.mapLocations.push(locations);
 				self.markerArray.push(marker);
