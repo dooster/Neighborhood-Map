@@ -163,11 +163,11 @@ var ViewModel = function () {
 		delete locations.marker;
 		if (!localStorage.savedLocations) {
 			localStorage.savedLocations = JSON.stringify([]);
-		};
+		}
 		var localData = JSON.parse(localStorage.savedLocations);
 		if (JSON.stringify(localData).indexOf(locations.venue()) === -1) {
 			localData.push(locations);
-			localStorage.savedLocations = ko.toJSON(localData);;
+			localStorage.savedLocations = ko.toJSON(localData);
 		} else {
 			return;
 		}
@@ -433,7 +433,7 @@ var ViewModel = function () {
 
 function googleError () {
 	$('#map').html("<h2>Sorry! Google Maps failed to load. Please check your internet connection and try refreshing the page.</h2>");
-};
+}
 
 /*Non-critical TODO:
 -add extra features to search such as autocomplete
