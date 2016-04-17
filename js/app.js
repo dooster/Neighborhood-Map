@@ -1,3 +1,5 @@
+//Initialize the instance of Google Maps for the application with certain bounds
+//After the map initializes, use the function to load the ViewModel
 var initMap = function () {
 	var mapOptions = {
 		disableDefaultUI: true,
@@ -18,6 +20,7 @@ var initMap = function () {
 };
 
 //Create a master Place constuctor function to allow creation of all venue data necessary.
+//This will create KO objects for each property of the item
 //Created with help from https://discussions.udacity.com/t/having-trouble-accessing-data-outside-an-ajax-request/39072/11
 var Place = function(object) {
 	this.venue = ko.observable(object.name);
@@ -35,6 +38,8 @@ var Place = function(object) {
 var ViewModel = function () {
 	var self=this;
 
+	//The list of my favorite locations in Astoria, which is based on my preferences
+	//And not those of FourSquare
 	var jeremyLocations = [
 		{
 			name: 'SingleCut Beersmiths',
@@ -118,12 +123,16 @@ var ViewModel = function () {
 			rating: 9.0,
 			ref: 'jeremyLocations'
 		}];
+
+	//The various data handling arrays that will hold all of the information for the application
 	var formattedJeremy =[];
 	var fourSquareLocations = [];
 	var savedLocations = [];
 	var formattedSaved =[];
 	this.mapLocations = ko.observableArray();
 
+	//The following display functions clear the mapLocations array and markers,
+	//and then repopulate the map with data from either FourSquare, my recommendations, or localStorage
 	this.displayResults = function() {
 		self.mapLocations.removeAll();
 		self.clearMarkers();
@@ -135,6 +144,7 @@ var ViewModel = function () {
 		self.clearMarkers();
 		formattedJeremy.length = 0;
 		self.createLocations(jeremyLocations);
+		self.createMarker(formattedJeremy);
 	};
 
 	this.displaySaved = function() {
@@ -145,6 +155,10 @@ var ViewModel = function () {
 		self.createSavedLocations(localItems);
 	};
 
+	//The function takes in an object that the user saves through a button in the infoWindow
+	//the function is then stripped of its marker property, to allow it to be saved into a JSON format
+	//THe function also creates a localStorage.savedLocations property if it does not exist
+	//And adds in the saved location to localStorage if the location does not already exist
 	this.pushSave = function(locations) {
 		delete locations.marker;
 		if (!localStorage.savedLocations) {
@@ -159,6 +173,8 @@ var ViewModel = function () {
 		}
 	};
 
+	//The AJAX request to FourSquare to pull in the most popular restaurants in Astoria
+	//within a select radius of the map
 	this.getFourSquare = function() {
 		var config = {
 			clientId: 'Y2I0LGBKFU2FCQLC3XOQEH4CIV1R4IKT4X10CT1FPAZS2VYC',
@@ -187,6 +203,9 @@ var ViewModel = function () {
 	};
 	this.getFourSquare();
 
+	//This takes in FourSquare or JeremyLocation data and pushes the data into the Knockout
+	//Place constructor to create Knockout objects. The data is then pushed into the
+	//createMarker function in order to create map markers for each object.
 	//partially based off of the discussion at https://discussions.udacity.com/t/p5-status-check-in/29104
 	this.createLocations = function (loc) {
 		for (var i =0; i < loc.length; i++) {
@@ -227,13 +246,12 @@ var ViewModel = function () {
 				fourSquareLocations.push(new Place(object));
 			}
 		}
-		if (loc.length < 29) {
-			self.createMarker(formattedJeremy);
-		} else {
+		if (loc.length >= 29) {
 			self.createMarker(fourSquareLocations);
 		}
 	};
 
+	//Create Knockout objects from localStorage
 	this.createSavedLocations = function(loc) {
 		for (var i =0; i < loc.length; i++) {
 			var venue = loc[i];
@@ -262,11 +280,15 @@ var ViewModel = function () {
 		self.createMarker(formattedSaved);
 	};
 
+	//A marker array which holds the following markers when created in the createMarker function.
 	//based off of code from https://github.com/lacyjpr/neighborhood/blob/master/src/js/app.js
 	this.markerArray = ko.observableArray([]);
 
 	var infowindow, location, button;
 
+	//This function loops through the objects pushed into it from the previous functions.
+	//It creates markers based on whether the object is originally from FourSquare or my recommendations,
+	//assigning unique markers and a slightly different infowindow in each case.
 	//closure model based off of answer at StackOverflow http://stackoverflow.com/questions/14661377/info-bubble-always-shows-up-on-the-last-marker
 	this.createMarker = function(locations) {
 		self.clearMarkers();
@@ -319,9 +341,12 @@ var ViewModel = function () {
 					}
 				});
 
+				//Push the locations into mapLocations, for display in the search box
+				//And into the marker array to create markers.
 				self.mapLocations.push(locations);
 				self.markerArray.push(marker);
 
+				//Create listeners on the markers, setting animation if clicked ...
 				google.maps.event.addListener(marker, 'click', function() {
 					if (marker.getAnimation() !== null) {
 						marker.setAnimation(null);
@@ -333,6 +358,8 @@ var ViewModel = function () {
 					}, 1200);
 				}, false);
 
+				// ... And opening and closing the infowindows should something else
+				//on the map be clicked
 				google.maps.event.addListener(marker, 'click', function() {
 					if (infowindow) infowindow.close();
 					infowindow = new google.maps.InfoWindow({
@@ -355,30 +382,25 @@ var ViewModel = function () {
 		google.maps.event.trigger(loc.marker, 'click');
 	};
 
+	//Loop through the marker array and set the markers on the map
 	this.setMarkerMap = function(map) {
 		for (var i = 0; i < self.markerArray.length; i++) {
 			self.markerArray[i].setMap(map);
 		}
 	};
 
+	//When called, remove the markers from the map and clear the markerArray. This allows
+	//users to toggle between the various location tabs without having a number of markers
+	//from FourSquare, localStorage, and my recommendations all competing for screen time.
 	this.clearMarkers = function(map) {
 		self.setMarkerMap(null);
 		self.markerArray = [];
 	};
 
+	//The following code hides the search results based upon clicks on the hamburger menu.
+	//This code only comes into effect on smaller screens based upon media queries.
 	var hamburger = document.getElementById('hamburger');
 	var nav = document.getElementById('nav-bar');
-
-	/*hamburger.addEventListener("click", function() {
-		if (nav.style.visibility == "visible") {
-			nav.style.visibility = "hidden";
-		} else {
-			nav.style.visibility = "visible";
-		}
-	});*/
-
-	var itemList = document.getElementById('location-list');
-	var itemToggle = document.getElementById('search');
 
 	hamburger.addEventListener('click', function(e) {
 		if (nav.className == "open") {
@@ -388,9 +410,12 @@ var ViewModel = function () {
 		}
 		e.preventDefault();
 	}, false);
+
 	//big help for the search functionality from http://codepen.io/JohnMav/pen/OVEzWM/?editors=1010
 	this.query = ko.observable('');
 
+	//Create a filter function, which hides items from the map and search box depending upon
+	//the input query
 	//help with filtering map markers https://discussions.udacity.com/t/google-map-marker-filter-issues/15244/5
 	this.search = ko.computed(function (value) {
 		return ko.utils.arrayFilter(self.mapLocations(), function(mapLocations) {
@@ -410,13 +435,11 @@ function googleError () {
 	$('#map').html("<h2>Sorry! Google Maps failed to load. Please check your internet connection and try refreshing the page.</h2>");
 };
 
-/*Todo
+/*Non-critical TODO:
 -add extra features to search such as autocomplete
 -show user's location
 -implement and link another API - delivery?
--make CSS transition
 -create a Gulp workflow
--app features thorough comments
 -create a README
 -change the way the cursor looks over the nav-item
 
