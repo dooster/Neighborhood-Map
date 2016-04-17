@@ -369,13 +369,25 @@ var ViewModel = function () {
 	var hamburger = document.getElementById('hamburger');
 	var nav = document.getElementById('nav-bar');
 
-		hamburger.addEventListener("click", function() {
-			if (nav.style.visibility == "visible") {
-				nav.style.visibility = "hidden";
-			} else {
-				nav.style.visibility = "visible";
-			}
-		});
+	/*hamburger.addEventListener("click", function() {
+		if (nav.style.visibility == "visible") {
+			nav.style.visibility = "hidden";
+		} else {
+			nav.style.visibility = "visible";
+		}
+	});*/
+
+	var itemList = document.getElementById('location-list');
+	var itemToggle = document.getElementById('search');
+
+	hamburger.addEventListener('click', function(e) {
+		if (nav.className == "open") {
+			nav.className = "";
+		} else {
+			nav.className = "open";
+		}
+		e.preventDefault();
+	}, false);
 	//big help for the search functionality from http://codepen.io/JohnMav/pen/OVEzWM/?editors=1010
 	this.query = ko.observable('');
 

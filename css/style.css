@@ -12,7 +12,6 @@ html, body {
 #map-container{
 	max-width: 100%;
 	max-height: 100%;
-	/*justify-content: flex-start;*/
 }
 
 #map {
@@ -35,11 +34,17 @@ html, body {
 	position: absolute;
 	margin: 0;
 	padding: 0;
-	overflow: scroll;
-	max-height: 75vh;
+	overflow: hidden;
+	max-height: 0;
 	z-index: 1;
 	background: white;
 	opacity: 0.83;
+	transition: max-height 0.25s ease-out;
+}
+
+#nav-bar.open {
+	max-height: 75vh;
+	overflow: scroll;
 }
 
 /* scrollbar appearance thanks to: http://stackoverflow.com/questions/7492062/css-overflow-scroll-always-show-vertical-scroll-bar */
@@ -68,12 +73,6 @@ html, body {
 }
 /* Setting media properties across devices */
 
-@media screen and (max-width: 650px){
-	#nav-bar{
-		visibility: hidden;
-	}
-}
-
 @media screen and (min-width: 660px){
 	#hamburger{
 		visibility: hidden;
@@ -81,11 +80,7 @@ html, body {
 
 	#nav-bar{
 		width: 21%;
-	}
-}
-
-@media screen and (min-width: 850px){
-	#nav-bar{
-		width: 17%;
+		overflow: scroll;
+		max-height: 75vh;
 	}
 }
