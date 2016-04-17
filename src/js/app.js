@@ -320,7 +320,7 @@ var ViewModel = function () {
 						clickable: true,
 						animation: google.maps.Animation.DROP,
 						//free icon from https://www.iconfinder.com/icons/751865/food_location_map_navigation_pin_poi_restaurant_icon#size=16
-						icon: 'img/1458190296_location_3-03.svg'
+						icon: 'dist/images/img/1458190296_location_3-03.svg'
 					});
 					contentString.innerHTML = "<div id='info-content'>" +
 						"<a href ='" + locations.website() + "'>" + locations.venue() + "</a>" +
