@@ -1,0 +1,28 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "description": "Neighborhood map project for Udacity",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dooster/Neighborhood-Map.git"
+  },
+  "author": "Jeremy Bender",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dooster/Neighborhood-Map/issues"
+  },
+  "homepage": "https://github.com/dooster/Neighborhood-Map#readme",
+  "devDependencies": {
+    "critical": "^0.7.2",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-cache": "^0.4.4",
+    "gulp-cssnano": "^2.1.1",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-uglify": "^1.5.3"
+  }
+}
